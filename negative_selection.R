@@ -48,7 +48,7 @@ rvis <- merge(rvis, symbol2name, by = "gene_symbol")[, c("gene", "rvis")]
 
 disp <- merge(disp, rvis, by = "gene", all.x = TRUE)
 
-disp <- disp %>%
+disp <- disp[!duplicated(gene)] %>%
   mutate(., expression_decile = ntile(baseMean, 10)) %>%
   mutate(., hs_decile = ntile(hs, 10)) %>%
   mutate(., rvis_decile = ntile(rvis, 10)) %>%
