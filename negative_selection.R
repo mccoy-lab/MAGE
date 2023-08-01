@@ -212,39 +212,31 @@ top_panel <- ggplot(data = constraint_dt, aes(x = numCredibleSets, y = density, 
 
 ####
 
-bestHits <- fread("~/Downloads/eQTL_finemapping.bestHits.txt.gz") %>%
-  setnames(., "geneID", "gene_id") %>%
-  setnames(., "variantID", "variant_id")
+eqtl_effects <- fread("~/Downloads/eQTL_finemapping.credibleSets.marginalEffects.txt.gz") %>%
+  .[, gene_id := gsub("\\..*", "", geneID)]
 
-fastQTL <- fread("~/Downloads/fastqtl_all.significantPairs.txt.gz")
+eqtl_effects[, pLI := gene_id %in% disp[pLI_decile == 10]$gene]
+eqtl_effects[, LOEUF := gene_id %in% disp[loeuf_decile == 1]$gene]
+eqtl_effects[, pHaplo := gene_id %in% disp[pHaplo_decile == 10]$gene]
+eqtl_effects[, pTriplo := gene_id %in% disp[pTriplo_decile == 10]$gene]
+eqtl_effects[, hs := gene_id %in% disp[hs_decile == 10]$gene]
+eqtl_effects[, RVIS := gene_id %in% disp[rvis_decile == 1]$gene]
 
-bestHits <- merge(bestHits, fastQTL, by = c("gene_id", "variant_id")) %>%
-  .[, gene_id := gsub("\\..*", "", gene_id)]
-
-rm(fastQTL)
-
-bestHits[, pLI := gene_id %in% disp[pLI_decile == 10]$gene]
-bestHits[, LOEUF := gene_id %in% disp[loeuf_decile == 1]$gene]
-bestHits[, pHaplo := gene_id %in% disp[pHaplo_decile == 10]$gene]
-bestHits[, pTriplo := gene_id %in% disp[pTriplo_decile == 10]$gene]
-bestHits[, hs := gene_id %in% disp[hs_decile == 10]$gene]
-bestHits[, RVIS := gene_id %in% disp[rvis_decile == 1]$gene]
-
-bestHits_melted <- melt(bestHits, id.vars = c("variant_id", "gene_id", "slope"), 
+eqtl_effects_melted <- melt(eqtl_effects, id.vars = c("topHitVariantID", "gene_id", "topHitMarginalSlope"), 
                         measure.vars = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVIS"))
 
-pli_eqtl_p <- t.test(log(abs(bestHits[pLI == TRUE]$slope)), log(abs(bestHits[pLI == FALSE]$slope)))$p.value
-loeuf_eqtl_p <- t.test(log(abs(bestHits[LOEUF == TRUE]$slope)), log(abs(bestHits[LOEUF == FALSE]$slope)))$p.value
-pHaplo_eqtl_p <- t.test(log(abs(bestHits[pHaplo == TRUE]$slope)), log(abs(bestHits[pHaplo == FALSE]$slope)))$p.value
-pTriplo_eqtl_p <- t.test(log(abs(bestHits[pTriplo == TRUE]$slope)), log(abs(bestHits[pTriplo == FALSE]$slope)))$p.value
-hs_eqtl_p <- t.test(log(abs(bestHits[hs == TRUE]$slope)), log(abs(bestHits[hs == FALSE]$slope)))$p.value
-rvis_eqtl_p <- t.test(log(abs(bestHits[RVIS == TRUE]$slope)), log(abs(bestHits[RVIS == FALSE]$slope)))$p.value
+pli_eqtl_p <- t.test(log(abs(eqtl_effects[pLI == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[pLI == FALSE]$topHitMarginalSlope)))$p.value
+loeuf_eqtl_p <- t.test(log(abs(eqtl_effects[LOEUF == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[LOEUF == FALSE]$topHitMarginalSlope)))$p.value
+pHaplo_eqtl_p <- t.test(log(abs(eqtl_effects[pHaplo == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[pHaplo == FALSE]$topHitMarginalSlope)))$p.value
+pTriplo_eqtl_p <- t.test(log(abs(eqtl_effects[pTriplo == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[pTriplo == FALSE]$topHitMarginalSlope)))$p.value
+hs_eqtl_p <- t.test(log(abs(eqtl_effects[hs == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[hs == FALSE]$topHitMarginalSlope)))$p.value
+rvis_eqtl_p <- t.test(log(abs(eqtl_effects[RVIS == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[RVIS == FALSE]$topHitMarginalSlope)))$p.value
 
 pval_eqtl_dt <- data.table(metric = c("1", "2", "3", "4", "5", "6"),
                       pval = c(pli_eqtl_p, loeuf_eqtl_p, pHaplo_eqtl_p, pTriplo_eqtl_p, hs_eqtl_p, rvis_eqtl_p),
                       y_facet = "Top 10%")
 
-eqtl_hist <- ggplot(data = bestHits_melted, aes(x = abs(slope), fill = value)) +
+eqtl_hist <- ggplot(data = eqtl_effects_melted, aes(x = abs(topHitMarginalSlope), fill = value)) +
   geom_histogram(size = 0.1, aes(y = after_stat(density))) +
   facet_grid(value ~ variable) +
   theme_bw() +
