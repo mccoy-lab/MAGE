@@ -163,31 +163,8 @@ constraint_dt[constraint_criterion == FALSE, y_facet := "Lower 90%"]
 
 constraint_dt$y_facet <- factor(constraint_dt$y_facet, levels = c("Top 10%", "Lower 90%"))
 
-ggplot(data = constraint_dt, aes(x = numCredibleSets, y = density, color = y_facet)) +
-  geom_point() +
-  geom_line() +
-  xlim(-1, 11) +
-  theme_minimal() +
-  theme(panel.grid.minor = element_blank()) +
-  facet_grid(. ~ metric, scales = "free") + 
-  ylab("Density") +
-  xlab("Number of credible sets") +
-  scale_color_brewer(palette = "Set2", name = "")
-
-ggplot(data = constraint_dt, aes(x = numCredibleSets, y = density_flip, fill = y_facet)) +
-  geom_bar(stat = "identity") +
-  xlim(-1, 11) +
-  theme_minimal() +
-  theme(panel.grid.minor = element_blank(), legend.position = "none") +
-  facet_grid(y_facet ~ metric, scales = "free") + 
-  scale_y_continuous(labels = abs) +
-  ylab("Density") +
-  xlab("Number of credible sets") +
-  scale_fill_brewer(palette = "Set2")
-
 constraint_dt$metric <- factor(constraint_dt$metric, 
                                levels = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVIS"))
-
 
 pval_dt <- data.table(metric = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVIS"),
            pval = c(pli_p, loeuf_p, pHaplo_p, pTriplo_p, hs_p, rvis_p),
@@ -196,16 +173,15 @@ pval_dt <- data.table(metric = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVI
 pval_dt$metric <- factor(pval_dt$metric, 
                          levels = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVIS"))
 
-top_panel <- ggplot(data = constraint_dt, aes(x = numCredibleSets, y = density, color = y_facet)) +
-  geom_point(size = 1) +
-  geom_line() +
-  xlim(-0.2, 11) +
-  theme_minimal() +
+top_panel <- ggplot(data = constraint_dt, aes(x = numCredibleSets, y = density, fill = y_facet)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  xlim(-1, 11) +
+  theme_bw() +
   theme(panel.grid.minor = element_blank()) +
   facet_grid(. ~ metric, scales = "free") + 
-  ylab("Density") +
+  ylab("Proportion of eGenes") +
   xlab("Number of credible sets") +
-  scale_color_brewer(palette = "Set2", name = "") +
+  scale_fill_manual(values = c("#CD7EAE","#668A99"), name = "") +
   geom_text(data = pval_dt, aes(x = 7, y = 0.35, 
                                 label = paste("p =", formatC(pval, format = "e", digits = 2))), 
             color = "black", size = 3)
@@ -225,6 +201,10 @@ eqtl_effects[, RVIS := gene_id %in% disp[rvis_decile == 1]$gene]
 eqtl_effects_melted <- melt(eqtl_effects, id.vars = c("topHitVariantID", "gene_id", "topHitMarginalSlope"), 
                         measure.vars = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVIS"))
 
+eqtl_effects_melted[, is_constrained := as.character("NA")]
+eqtl_effects_melted[value == TRUE, is_constrained := "Top 10%"]
+eqtl_effects_melted[value == FALSE, is_constrained := "Lower 90%"]
+
 pli_eqtl_p <- t.test(log(abs(eqtl_effects[pLI == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[pLI == FALSE]$topHitMarginalSlope)))$p.value
 loeuf_eqtl_p <- t.test(log(abs(eqtl_effects[LOEUF == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[LOEUF == FALSE]$topHitMarginalSlope)))$p.value
 pHaplo_eqtl_p <- t.test(log(abs(eqtl_effects[pHaplo == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[pHaplo == FALSE]$topHitMarginalSlope)))$p.value
@@ -232,46 +212,26 @@ pTriplo_eqtl_p <- t.test(log(abs(eqtl_effects[pTriplo == TRUE]$topHitMarginalSlo
 hs_eqtl_p <- t.test(log(abs(eqtl_effects[hs == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[hs == FALSE]$topHitMarginalSlope)))$p.value
 rvis_eqtl_p <- t.test(log(abs(eqtl_effects[RVIS == TRUE]$topHitMarginalSlope)), log(abs(eqtl_effects[RVIS == FALSE]$topHitMarginalSlope)))$p.value
 
-pval_eqtl_dt <- data.table(metric = c("1", "2", "3", "4", "5", "6"),
+pval_eqtl_dt <- data.table(variable = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVIS"),
                       pval = c(pli_eqtl_p, loeuf_eqtl_p, pHaplo_eqtl_p, pTriplo_eqtl_p, hs_eqtl_p, rvis_eqtl_p),
-                      y_facet = "Top 10%")
+                      is_constrained = "Top 10%")
 
-eqtl_hist <- ggplot(data = eqtl_effects_melted, aes(x = abs(topHitMarginalSlope), fill = value)) +
-  geom_histogram(size = 0.1, aes(y = after_stat(density))) +
-  facet_grid(value ~ variable) +
+eqtl_effects_melted$variable <- factor(eqtl_effects_melted$variable, 
+                         levels = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVIS"))
+
+lower_panel <- ggplot(data = eqtl_effects_melted, aes(x = abs(topHitMarginalSlope), fill = is_constrained)) +
+  geom_density(alpha = 0.5) +
   theme_bw() +
-  scale_fill_manual(values = c("#66c2a5", "#fc8d62")) +
-  ylab(expression("Absolute eQTL effect size (" ~ italic(hat(beta)) ~ ")"))
-
-eqtl_hist_dt <- layer_data(eqtl_hist) %>%
-  as.data.table() %>%
-  .[, metric := as.numeric(PANEL)]
-
-eqtl_hist_dt[metric > 6, metric := metric - 6]
-
-eqtl_hist_dt[, y_facet := as.character("NA")]
-eqtl_hist_dt[fill == "#fc8d62", y_facet := "Top 10%"]
-eqtl_hist_dt[fill == "#66c2a5", y_facet := "Lower 90%"]
-
-eqtl_hist_dt$y_facet <- factor(eqtl_hist_dt$y_facet, levels = c("Top 10%", "Lower 90%"))
-
-lower_panel <- ggplot(data = eqtl_hist_dt, aes(x = x, y = y, color = y_facet)) +
-  geom_point(size = 0.5) +
-  geom_line() +
-  facet_grid(. ~ metric) +
-  scale_color_brewer(palette = "Set2", name = "",
-                     guide = guide_legend(override.aes = list(color = "white"))) +
-  xlab(expression("Absolute eQTL effect size ( |" ~ italic(hat(beta)) ~ "| )")) +
-  ylab("Density") +
-  theme_minimal() +
-  xlim(-0.05, 2.6) +
-  theme(strip.text.x = element_blank(), 
-        panel.grid.minor = element_blank(),
-        legend.text = element_text(color = "white"),
-        legend.title = element_text(color = "white"),
-        legend.key = element_rect(color = "white", fill = "white"))  +
+  facet_grid(. ~ variable, scales = "free") + 
+  scale_fill_manual(values = rev(c("#CD7EAE","#668A99")), name = "") +
+  scale_color_manual(values = rev(c("#CD7EAE","#668A99")), name = "") +
+  theme(legend.position = "none") +
+  ylab("Density")  +
+  xlab(expression("Absolute eQTL effect size (|" ~ hat(beta) ~ "|)")) +
   geom_text(data = pval_eqtl_dt, aes(x = 1.7, y = 2.8, 
-                                label = paste("p =", formatC(pval, format = "e", digits = 2))), 
+                                     label = paste("p =", formatC(pval, format = "e", digits = 2))), 
             color = "black", size = 3)
+
+### multipanel grid ###
 
 plot_grid(top_panel, lower_panel, nrow = 2, align = "v", axis = "lr")
