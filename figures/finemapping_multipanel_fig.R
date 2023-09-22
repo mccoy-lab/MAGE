@@ -241,23 +241,24 @@ panel_cs_by_pli <- ggplot(data = pli_dt, aes(x = factor(numCredibleSets), y = de
 
 ### stratify eQTL effect size by pLI ###
 
-eqtl_effects <- fread("~/Downloads/eQTL_finemapping.credibleSets.marginalEffects.txt.gz") %>%
-  .[, gene_id := gsub("\\..*", "", geneID)]
+eqtl_effects <- fread("~/Downloads/kgpex.sample.filtered.covariate-corrected.ci95_wGT.aFC.txt.gz") %>%
+  .[, gene_id := gsub("\\..*", "", gene_id)]
 
 eqtl_effects[, pLI := gene_id %in% disp[pLI_decile == 10]$gene]
-pli_eqtl_p <- t.test(log(abs(eqtl_effects[pLI == TRUE]$topHitMarginalSlope)), 
-                     log(abs(eqtl_effects[pLI == FALSE]$topHitMarginalSlope)))$p.value
+pli_eqtl_p <- wilcox.test(abs(eqtl_effects[pLI == TRUE]$log2_aFC), 
+                          abs(eqtl_effects[pLI == FALSE]$log2_aFC))$p.value
 
 panel_eqtl_beta_by_pli <- ggplot(data = eqtl_effects, 
-                                 aes(x = abs(topHitMarginalSlope), fill = pLI, color = pLI)) +
+                                 aes(x = abs(log2_aFC), fill = pLI, color = pLI)) +
   geom_density(alpha = 0.5) +
   theme_bw() +
   scale_fill_manual(values = rev(c("#CD7EAE","#668A99")), name = "") +
   scale_color_manual(values = rev(c("#CD7EAE","#668A99")), name = "") +
   theme(legend.position = "none") +
   ylab("Density")  +
-  xlab(expression("Absolute eQTL effect size (|" ~ italic(hat(beta)) ~ "|)")) +
-  annotate(y = 1.5, x = 1.75, label = paste("p =", formatC(pli_eqtl_p, format = "e", digits = 2)), 
+  xlab(bquote('Absolute eQTL effect size (|' ~log[2]~(aFC)~'|)')) +
+   # xlab(expression("Absolute eQTL effect size (|" ~ log_2_(aFC) ~ "|)")) +
+  annotate(y = 1.5, x = 4, label = paste("p =", formatC(pli_eqtl_p, format = "e", digits = 2)), 
            color = "black", size = 4, geom = "text")
 
 ### plot multipanel ###
@@ -267,3 +268,6 @@ plot_grid(panel_cs_per_gene, panel_var_per_cs_log,
           panel_interaction_left, panel_interaction_right,
           nrow = 3, align = "vh", axis = "lrtb",
           labels = paste0(LETTERS[1:6], "."))
+
+
+
