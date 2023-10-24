@@ -15,7 +15,7 @@
         * [Summary of credible sets](#summary-of-credible-sets)
         * [Fine-mapping results (all associations)](#fine-mapping-results-all-associations)
         * [Fine-mapping results (credible set variants only)](#fine-mapping-results-credible-set-variants-only)
-        * [Credible set lead variants and effect sizes](#credible-set-lead-variant-and-effect-sizes)
+        * [Credible set lead variants and effect sizes](#credible-set-lead-variants-and-effect-sizes)
 * [**sQTL mapping results**](#sqtl-mapping-results)
     * [Splicing filtered gene list](#splicing-filtered-gene-list)
     * [Summary of sQTL mapping results](#summary-of-sqtl-mapping-results)
