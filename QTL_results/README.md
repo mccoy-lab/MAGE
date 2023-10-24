@@ -29,6 +29,8 @@
         * [Fine-mapping results (credible set variants only)](#fine-mapping-results-credible-set-variants-only)
         * [Fine-mapping results (gene-level merged credible sets)](#fine-mapping-results-gene-level-merged-credible-sets)
 
+<br><br>
+
 # Overview
 
 This directory contains eQTL and sQTL mapping results for the MAGE v0.1 data set. For eQTL and sQTL mapping, a nominal pass was performed with [FastQTL](https://github.com/francois-a/fastqtl). To identify eGenes and sGenes, as well as significant nominal associations, a permutation pass was performed, also with [FastQTL](https://github.com/francois-a/fastqtl).
@@ -37,7 +39,9 @@ After identifying eGenes and sGenes with FastQTL, fine-mapping was performed wit
 
 For MAGE v0.1, QTL mapping is limited to the autosomes; there are no results for chrX or chrY. QTL mapping results for the sex chromosomes will be added in a future release.
 
-All QTL summary statistics are available in tabixed format in the **[MAGE dropbox]()**. All genomic coordinates are relative to the GRCh38 reference. 
+All QTL summary statistics are available in tabixed format in the **[MAGE dropbox]()**. All genomic coordinates are relative to the GRCh38 reference.
+
+<br><br>
 
 # eQTL mapping results
 
@@ -182,6 +186,8 @@ For each credible set, we selected a single "lead" variant with the highest PIP 
 17. `log2_aFC_c0_max_95_interv`: The upper limit of the 95% CI around the `log2_aFC_c0` estimate
 
 A tabix index is also provided for this file.
+
+<br><br>
 
 # sQTL mapping results
 
@@ -336,3 +342,5 @@ for each sGene, we created gene-level merged credible sets by iteratively mergin
 10. `intronIDs`: A comma-separated list of all introns that were merged to form the gene-level credible set identified in the `mergedCredibleSet` column
 
 A tabix index is also provided for this file.<br><br>
+
+<br><br>
