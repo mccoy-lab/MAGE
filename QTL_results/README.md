@@ -357,7 +357,7 @@ Fine-mapping results for ONLY those variants that were part of a credible causal
 A tabix index is also provided for this file.
 
 ### sQTL fine-mapping results (gene-level merged credible sets)
-for each sGene, we created gene-level merged credible sets by iteratively merging any overlapping (i.e. contains the same variant) intron-level credible sets for that gene. These results are available in [`sQTL_finemapping.geneMerged.significantAssociations.MAGE.v0.1.txt.gz`](). This file is organized on a by-association basis: there is one line for each tested variant-gene association in the filtered data set. The columns in this file are as follows:
+For each sGene, we created gene-level merged credible sets by iteratively merging any overlapping (i.e. contains the same variant) intron-level credible sets for that gene. These results are available in [`sQTL_finemapping.geneMerged.significantAssociations.MAGE.v0.1.txt.gz`](). This file is organized on a by-association basis: there is one line for each tested variant-gene association in the filtered data set. The columns in this file are as follows:
 1. `variantChrom`: The chromosome of the tested variant
 2. `variantPosition`: The 1-based position (on `variantChrom`) of the tested variant
 3. `variantRef`: The reference allele of the tested variant
