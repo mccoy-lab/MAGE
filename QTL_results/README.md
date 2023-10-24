@@ -1,8 +1,10 @@
 # eQTL and sQTL results for MAGE v0.1
 
-## Table of Contents
+## Table of contents
 
-* [Table of Contents]()
+* [Table of contents](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#table-of-contents)
+* [Overview](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#overview)
+* [eQTL results](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#eqtl-results)
 
 ## Overview
 
