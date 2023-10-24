@@ -12,6 +12,14 @@ All QTL summary statistics are available in tabixed format in the **[MAGE dropbo
 
 ## [eQTL results]()
 
+eQTL mapping was done using pseudocounts from [Salmon]([https://davidaknowles.github.io/leafcutter/](https://salmon.readthedocs.io/en/latest/)), and was done in three broad steps.
+
+In the first step, we used FastQTL to identify eGenes and significant nominal associations. In a permutation pass, pseudocounts were regressed onto sample genotypes, to compute an empirical p-value for each gene. Then, a nominal pass was run to discover significant variant-gene associations.
+
+In the second step, we used SuSiE to perform fine-mapping on all eGenes identified in the FastQTL permutation pass. We ran SuSiE for each eGene, to identify independent credible causal sets. 
+
+Finally, in the third step, we selected a representative "lead" variant (highest PIP) from each credible set, and used it to calculate the effect size of that credible set on the associated gene, as measured by allelic fold change (aFC). aFC was calculated using the [aFCn](https://github.com/PejLab/aFCn) tool, which jointly models the effects of all lead varaints for a given gene.
+
 ### Filtered genes
 
 A list of the genes that passed expression filtering and were used for eQTL mapping is available in [`expression_filteredGenes.MAGE.v0.1.txt.gz`](), along with it's corresponding tabix index.
