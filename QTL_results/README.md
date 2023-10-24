@@ -2,11 +2,11 @@
 
 ## Table of contents
 
-* [**Table of contents**](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#table-of-contents)
+* [**Table of contents**](#table-of-contents)
 * [**Overview**](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#overview)
-* [**eQTL results**](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#eqtl-results)
+* [**eQTL mapping results**](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#eqtl-results)
     * [Filtered genes](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#filtered-genes)
-    * [Summary of eQTL mapping](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#eqtl-mapping-summary)
+    * [Summary of eQTL mapping results](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#eqtl-mapping-summary)
     * [FastQTL nominal results](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#fastqtl-nominal-results)
         * [Permutation pass results](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#permutation-pass-results)
         * [Nominal pass results (all associations)](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#all-nominal-pass-results)
@@ -16,6 +16,9 @@
         * [Fine-mapping results (all associations)](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#all-fine-mapping-results)
         * [Fine-mapping results (credible set variants only)](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#significant-fine-mapping-results)
         * [Credible set lead variants and effect sizes](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#lead-variant-effect-sizes)
+* [**sQTL mapping results**](sqtl-results)
+    * [Filtered genes](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#filtered-genes-1)
+    * [Summary of sQTL mapping results](https://github.com/mccoy-lab/MAGE/blob/main/QTL_results/README.md#sqtl-mapping-summary)
 
 ## Overview
 
