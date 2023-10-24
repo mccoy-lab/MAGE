@@ -27,7 +27,7 @@
         * [Summary of credible sets](#summary-of-credible-sets)
         * [Fine-mapping results (all associations)](#fine-mapping-results-all-associations)
         * [Fine-mapping results (credible set variants only)](#fine-mapping-results-credible-set-variants-only)
-        * [Credible set lead variants and effect sizes](#fine-mapping-results-gene-level-merged-credible-sets))
+        * [Fine-mapping results (gene-level merged credible sets)](#fine-mapping-results-gene-level-merged-credible-sets)
 
 # Overview
 
