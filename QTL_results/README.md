@@ -27,7 +27,7 @@
         * [Summary of credible sets](#summary-of-credible-sets)
         * [Fine-mapping results (all associations)](#fine-mapping-results-all-associations)
         * [Fine-mapping results (credible set variants only)](#fine-mapping-results-credible-set-variants-only)
-        * [Credible set lead variants and effect sizes](#credible-set-lead-variant-and-effect-sizes)
+        * [Credible set lead variants and effect sizes](#fine-mapping-results-gene-level-merged-credible-sets))
 
 # Overview
 
@@ -39,7 +39,7 @@ For MAGE v0.1, QTL mapping is limited to the autosomes; there are no results for
 
 All QTL summary statistics are available in tabixed format in the **[MAGE dropbox]()**. All genomic coordinates are relative to the GRCh38 reference. 
 
-# [eQTL results]()
+# eQTL mapping results
 
 eQTL mapping was done using pseudocounts from [Salmon](https://salmon.readthedocs.io/en/latest/), and was done in three broad steps.
 
@@ -49,13 +49,13 @@ In the second step, we used SuSiE to perform fine-mapping on all eGenes identifi
 
 Finally, in the third step, we selected a representative "lead" variant (highest PIP) from each credible set, and used it to calculate the effect size of that credible set on the associated gene, as measured by allelic fold change (aFC). aFC was calculated using the [aFCn](https://github.com/PejLab/aFCn) tool, which jointly models the effects of all lead varaints for a given gene.
 
-## Filtered genes
+## Expression-level filtered gene list
 
 A list of the genes that passed expression filtering and were used for eQTL mapping is available in [`expression_filteredGenes.MAGE.v0.1.txt.gz`](), along with it's corresponding tabix index.
 
 The genomic coordinates listed in this file are BED-style: 0-based, half-open.
 
-## eQTL mapping summary
+## Summary of eQTL mapping results
 
 A summary of the eQTL mapping results for the filtered genes is available in [`eQTL_summary.MAGE.v0.1.txt.gz`](). The columns in this file are as follows:
 1. `ensemblID`: The [Ensembl](https://useast.ensembl.org/Homo_sapiens/Info/Index) gene ID
@@ -97,7 +97,7 @@ Permutation pass results are available in [`eQTL_FastQTL_results.permutation_pas
 
 A tabix index is also provided for this file.
 
-### All nominal pass results
+### Nominal pass results (all associations)
 Nominal pass results for ALL tested associations (significant and non-significant) are available in [`eQTL_FastQTL_results.nominal_pass.allAssociations.MAGE.v0.1.txt.gz`](). This file is organized on a by-association basis: there is one line for each tested variant-gene association in the filtered data set. The columns in this file are as follows:
 1. `variantChrom`: The chromosome of the tested variant
 2. `variantPosition`: The 1-based position (on `variantChrom`) of the tested variant
@@ -117,7 +117,7 @@ Nominal pass results for ALL tested associations (significant and non-significan
 
 A tabix index is also provided for this file.
 
-### Significant nominal pass results
+### Nominal pass results (significant associations)
 Significant nominal associations were determined by comparing the nominal _p_-value of the association (recorded in the `pval_nominal` field in the nominal pass results file) to the nominal _p_-value threshold of the corresponding gene determined during the permutation pass (recorded in the `pval_nominal_threshold` field in the permutation pass results file).
 
 Associations for which `pval_nominal < pval_nominal_threshold` were defined as significant nominal associations.
@@ -130,7 +130,7 @@ A tabix index is also provided for this file.
 
 The **[eQTL_finemapping_results]()** directory contains fine-mapping eQTL results: credible sets and summary statistics from SuSiE, and effect sizes from aFCn. Fine-mapping was performed for all genes identified as eGenes in the FastQTL permutation pass. There are four files files in this directory:
 
-### Credible set summary
+### Summary of credible sets
 Summary statistics for all of the eQTL credible sets identified by SuSiE are available in [`eQTL_finemapping.credibleSet_summary.MAGE.v0.1.txt.gz`](). This file is organized on a by-credible set basis: there is one line for each significant (coverage > 0.95) credible causal set. The columns in this file are as follows:
 1. `ensemblID`: The [Ensembl](https://useast.ensembl.org/Homo_sapiens/Info/Index) gene ID of the gene
 2. `geneSymbol`: The [HGNC](https://www.genenames.org/) gene symbol of the gene
@@ -141,7 +141,7 @@ Summary statistics for all of the eQTL credible sets identified by SuSiE are ava
 7. `meanCorr`: The mean correlation (in genotype) between variants in the credible set
 8. `medianCorr`: The median correlation (in genotype) between variants in the credible set
 
-### All fine-mapping results
+### Fine-mapping results (all associations)
 Fine-mapping results for ALL tested variants (included in credible sets and not) are available in [`eQTL_finemapping.allAssociations.MAGE.v0.1.txt.gz`](). This file is organized on a by-association basis: there is one line for each tested variant-gene association in the filtered data set. The columns in this file are as follows:
 1. `variantChrom`: The chromosome of the tested variant
 2. `variantPosition`: The 1-based position (on `variantChrom`) of the tested variant
@@ -156,12 +156,12 @@ Fine-mapping results for ALL tested variants (included in credible sets and not)
 
 A tabix index is also provided for this file.
 
-### Significant fine-mapping results
+### Fine-mapping results (credible set variants only)
 Fine-mapping results for ONLY those variants that were part of a credible causal set are available in [`eQTL_finemapping.significantAssociations.MAGE.v0.1.txt.gz`](). This file is organized as described in the [All fine-mapping results]() section above.
 
 A tabix index is also provided for this file.
 
-### Lead variant effect sizes
+### Credible set lead variants and effect sizes
 For each credible set, we selected a single "lead" variant with the highest PIP within that credible set. For each lead variant, we calculated its effect on the associated gene as measured by allelic fold change (aFC). The lead variants for each credible set, along with their corresponding aFC effect size is available in [`eQTL_finemapping.leadVariant_aFCn.MAGE.v0.1.txt.gz`](). This file is organized on a by-credible set basis: there is one line for each credible causal set. The columns in this file are as follows:
 1. `variantChrom`: The chromosome of the lead variant
 2. `variantPosition`: The 1-based position (on `variantChrom`) of the lead variant
@@ -183,7 +183,7 @@ For each credible set, we selected a single "lead" variant with the highest PIP 
 
 A tabix index is also provided for this file.
 
-# [sQTL results]()
+# sQTL mapping results
 
 sQTL mapping was done using intron excision ratios from [Leafcutter](https://davidaknowles.github.io/leafcutter/), and was done in two broad steps.
 
@@ -191,13 +191,13 @@ In the first step, we used FastQTL to identify sGenes and significant nominal as
 
 In the second step, we used SuSiE to perform fine-mapping on all sGenes identified in the FastQTL permutation pass. We ran SuSiE for each intron of each sGene, to identify independent credible causal sets for each intron. Then, for each sGene, we created gene-level merged credible sets by iteratively merging any overlapping (i.e. contains the same variant) intron-level credible sets for that gene.
 
-## Filtered genes
+## Splicing filtered gene list
 
 A list of the genes that passed splicing filtering and were used for sQTL mapping is available in [`splicing_filteredGenes.MAGE.v0.1.txt.gz`](), along with it's corresponding tabix index.
 
 The genomic coordinates listed in this file are BED-style: 0-based, half-open.
 
-## sQTL mapping summary
+## Summary of sQTL mapping results
 
 A summary of the sQTL mapping results for the filtered genes is available in [`sQTL_summary.MAGE.v0.1.txt.gz`](). The columns in this file are as follows:
 1. `ensemblID`: The [Ensembl](https://useast.ensembl.org/Homo_sapiens/Info/Index) gene ID
@@ -253,7 +253,7 @@ This file is organized on a by-gene basis: there is one line for each gene in th
 
 A tabix index is also provided for this file.
 
-### All nominal pass results
+### Nominal pass results (all associations)
 Nominal pass results for ALL tested associations (significant and non-significant) are available in [`sQTL_FastQTL_results.nominal_pass.allAssociations.MAGE.v0.1.txt.gz`](). As before, this file largely matches the format of the eQTL nominal  pass file described [above](), but for completeness, we describe it here as well.
 
 This file is organized on a by-association basis: there is one line for each tested variant-intron association in the filtered data set. The columns in this file are as follows:
@@ -276,7 +276,7 @@ This file is organized on a by-association basis: there is one line for each tes
 
 A tabix index is also provided for this file.
 
-### Significant nominal pass results
+### Nominal pass results (significant associations)
 Significant nominal associations were determined by comparing the nominal _p_-value of the association (recorded in the `pval_nominal` field in the nominal pass results file) to the nominal _p_-value threshold of the corresponding gene determined during the permutation pass (recorded in the `pval_nominal_threshold` field in the permutation pass results file).
 
 Associations for which `pval_nominal < pval_nominal_threshold` were defined as significant nominal associations.
@@ -289,7 +289,7 @@ A tabix index is also provided for this file.
 
 The **[sQTL_finemapping_results]()** directory contains fine-mapping sQTL results: credible sets and summary statistics from SuSiE. Fine-mapping was performed for all introns of all genes identified as sGenes in the FastQTL permutation pass. There are four files files in this directory:
 
-### Credible set summary
+### Summary of credible sets
 Summary statistics for all of the sQTL credible sets identified by SuSiE are available in [`sQTL_finemapping.introns.credibleSet_summary.MAGE.v0.1.txt.gz`](). This file is organized on a by-credible set basis: there is one line for each significant (coverage > 0.95) credible causal set. The columns in this file are as follows:
 1. `intronID`: The ID of the tested intron. The format of these IDs is described in the [Permutation pass results]() section above
 2. `ensemblID`: The [Ensembl](https://useast.ensembl.org/Homo_sapiens/Info/Index) gene ID of the gene
@@ -301,7 +301,7 @@ Summary statistics for all of the sQTL credible sets identified by SuSiE are ava
 8. `meanCorr`: The mean correlation (in genotype) between variants in the credible set
 9. `medianCorr`: The median correlation (in genotype) between variants in the credible set
 
-### All fine-mapping results
+### Fine-mapping results (all associations)
 Fine-mapping results for ALL tested variants (included in credible sets and not) are available in [`sQTL_finemapping.introns.allAssociations.MAGE.v0.1.txt.gz`](). This file is organized on a by-association basis: there is one line for each tested variant-gene association in the filtered data set. The columns in this file are as follows:
 1. `variantChrom`: The chromosome of the tested variant
 2. `variantPosition`: The 1-based position (on `variantChrom`) of the tested variant
@@ -317,12 +317,12 @@ Fine-mapping results for ALL tested variants (included in credible sets and not)
 
 A tabix index is also provided for this file.
 
-### Significant intron-level fine-mapping results
+### Fine-mapping results (credible set variants only)
 Fine-mapping results for ONLY those variants that were part of a credible causal set are available in [`sQTL_finemapping.introns.significantAssociations.MAGE.v0.1.txt.gz`](). This file is organized as described in the [All fine-mapping results]() section above.
 
 A tabix index is also provided for this file.
 
-### Significant gene-level fine-mapping results
+### Fine-mapping results (gene-level merged credible sets)
 for each sGene, we created gene-level merged credible sets by iteratively merging any overlapping (i.e. contains the same variant) intron-level credible sets for that gene. These results are available in [`sQTL_finemapping.geneMerged.significantAssociations.MAGE.v0.1.txt.gz`](). This file is organized on a by-association basis: there is one line for each tested variant-gene association in the filtered data set. The columns in this file are as follows:
 1. `variantChrom`: The chromosome of the tested variant
 2. `variantPosition`: The 1-based position (on `variantChrom`) of the tested variant
