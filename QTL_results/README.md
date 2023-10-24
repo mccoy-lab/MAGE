@@ -81,7 +81,7 @@ A summary of the eQTL mapping results for the filtered genes is available in [`e
 
 <img src="/images/dropbox.png" width="15" style="float: bottom;"> **[MAGEv.01 eQTL nominal results]()**
 
-The **eQTL_nominal_results** directory contains nominal eQTL results: summary statistics from the nominal and permutation passes of FastQTL. There are three files in this directory:
+The `eQTL_nominal_results` directory contains nominal eQTL results: summary statistics from the nominal and permutation passes of FastQTL. There are three files in this directory:
 
 ### eQTL permutation pass results
 Permutation pass results are available in [`eQTL_FastQTL_results.permutation_pass.MAGE.v0.1.txt.gz`](). This file is organized on a by-gene basis: there is one line for each gene in the filtered data set. The columns in this file are as follows:
@@ -146,7 +146,7 @@ A tabix index is also provided for this file.
 
 <img src="/images/dropbox.png" width="15" style="float: bottom;"> **[MAGEv.01 eQTL finemapping results]()**
 
-The **eQTL_finemapping_results** directory contains fine-mapping eQTL results: credible sets and summary statistics from SuSiE, and effect sizes from aFCn. Fine-mapping was performed for all genes identified as eGenes in the FastQTL permutation pass. There are four files files in this directory:
+The `eQTL_finemapping_results` directory contains fine-mapping eQTL results: credible sets and summary statistics from SuSiE, and effect sizes from aFCn. Fine-mapping was performed for all genes identified as eGenes in the FastQTL permutation pass. There are four files files in this directory:
 
 ### Summary of eQTL credible sets
 Summary statistics for all of the eQTL credible sets identified by SuSiE are available in [`eQTL_finemapping.credibleSet_summary.MAGE.v0.1.txt.gz`](). This file is organized on a by-credible set basis: there is one line for each significant (coverage > 0.95) credible causal set. The columns in this file are as follows:
@@ -243,7 +243,7 @@ A summary of the sQTL mapping results for the filtered genes is available in [`s
 
 <img src="/images/dropbox.png" width="15" style="float: bottom;"> **[MAGEv.01 sQTL nominal results]()**
 
-The **sQTL_nominal_results** directory contains nominal sQTL results: summary statistics from the nominal and permutation passes of FastQTL. There are three files in this directory:
+The `sQTL_nominal_results` directory contains nominal sQTL results: summary statistics from the nominal and permutation passes of FastQTL. There are three files in this directory:
 
 ### sQTL permutation pass results
 Permutation pass results are available in [`sQTL_FastQTL_results.permutation_pass.MAGE.v0.1.txt.gz`](). This file largely matches the format of the eQTL permutation pass file described [above](), but for completeness, we describe it here as well.
@@ -321,7 +321,7 @@ A tabix index is also provided for this file.
 
 <img src="/images/dropbox.png" width="15" style="float: bottom;"> **[MAGEv.01 sQTL_finemapping results]()**
 
-The **sQTL_finemapping_results** directory contains fine-mapping sQTL results: credible sets and summary statistics from SuSiE. Fine-mapping was performed for all introns of all genes identified as sGenes in the FastQTL permutation pass. There are four files files in this directory:
+The `sQTL_finemapping_results` directory contains fine-mapping sQTL results: credible sets and summary statistics from SuSiE. Fine-mapping was performed for all introns of all genes identified as sGenes in the FastQTL permutation pass. There are four files files in this directory:
 
 ### Summary of sQTL credible sets
 Summary statistics for all of the sQTL credible sets identified by SuSiE are available in [`sQTL_finemapping.introns.credibleSet_summary.MAGE.v0.1.txt.gz`](). This file is organized on a by-credible set basis: there is one line for each significant (coverage > 0.95) credible causal set. The columns in this file are as follows:
