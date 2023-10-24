@@ -1,5 +1,7 @@
 # eQTL and sQTL results for MAGE v0.1
 
+<br><br><br>
+
 # Table of contents
 
 * [**Table of contents**](#table-of-contents)
@@ -29,7 +31,7 @@
         * [Fine-mapping results (credible set variants only)](#fine-mapping-results-credible-set-variants-only)
         * [Fine-mapping results (gene-level merged credible sets)](#fine-mapping-results-gene-level-merged-credible-sets)
 
-<br><br>
+<br><br><br>
 
 # Overview
 
@@ -41,7 +43,7 @@ For MAGE v0.1, QTL mapping is limited to the autosomes; there are no results for
 
 All QTL summary statistics are available in tabixed format in the **[MAGE dropbox]()**. All genomic coordinates are relative to the GRCh38 reference.
 
-<br><br>
+<br><br><br>
 
 # eQTL mapping results
 
@@ -53,7 +55,7 @@ In the second step, we used SuSiE to perform fine-mapping on all eGenes identifi
 
 Finally, in the third step, we selected a representative "lead" variant (highest PIP) from each credible set, and used it to calculate the effect size of that credible set on the associated gene, as measured by allelic fold change (aFC). aFC was calculated using the [aFCn](https://github.com/PejLab/aFCn) tool, which jointly models the effects of all lead varaints for a given gene.
 
-<br>
+<br><br>
 
 ## Expression-level filtered gene list
 
@@ -61,7 +63,7 @@ A list of the genes that passed expression filtering and were used for eQTL mapp
 
 The genomic coordinates listed in this file are BED-style: 0-based, half-open.
 
-<br>
+<br><br>
 
 ## Summary of eQTL mapping results
 
@@ -73,7 +75,7 @@ A summary of the eQTL mapping results for the filtered genes is available in [`e
 5. `is_eGene`: Whether the gene reached significance in the FastQTL permutation pass (5% FDR)
 6. `finemappedCredibleSets`: For the genes that reached significance in the permutation pass (i.e., eGenes), the number of independent credible causal sets identified by fine-mapping with SuSiE
 
-<br>
+<br><br>
 
 ## FastQTL nominal results
 
@@ -135,6 +137,8 @@ Associations for which `pval_nominal < pval_nominal_threshold` were defined as s
 Nominal pass results for ONLY the significant nominal associations are available in [`eQTL_FastQTL_results.nominal_pass.significantAssociations.MAGE.v0.1.txt.gz`](). The columns of this file are as described in the [All nominal pass results]() section above.
 
 A tabix index is also provided for this file.
+
+<br><br>
 
 ## SuSiE fine-mapping results
 
