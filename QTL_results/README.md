@@ -53,11 +53,15 @@ In the second step, we used SuSiE to perform fine-mapping on all eGenes identifi
 
 Finally, in the third step, we selected a representative "lead" variant (highest PIP) from each credible set, and used it to calculate the effect size of that credible set on the associated gene, as measured by allelic fold change (aFC). aFC was calculated using the [aFCn](https://github.com/PejLab/aFCn) tool, which jointly models the effects of all lead varaints for a given gene.
 
+<br>
+
 ## Expression-level filtered gene list
 
 A list of the genes that passed expression filtering and were used for eQTL mapping is available in [`expression_filteredGenes.MAGE.v0.1.txt.gz`](), along with it's corresponding tabix index.
 
 The genomic coordinates listed in this file are BED-style: 0-based, half-open.
+
+<br>
 
 ## Summary of eQTL mapping results
 
@@ -68,6 +72,8 @@ A summary of the eQTL mapping results for the filtered genes is available in [`e
 4. `significantAssocs`: The number of variant-gene associations that reached significance in the nominal FastQTL pass
 5. `is_eGene`: Whether the gene reached significance in the FastQTL permutation pass (5% FDR)
 6. `finemappedCredibleSets`: For the genes that reached significance in the permutation pass (i.e., eGenes), the number of independent credible causal sets identified by fine-mapping with SuSiE
+
+<br>
 
 ## FastQTL nominal results
 
