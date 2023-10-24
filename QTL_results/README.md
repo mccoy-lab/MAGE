@@ -1,7 +1,5 @@
 # eQTL and sQTL results for MAGE v0.1
 
-<br><br><br>
-
 # Table of contents
 
 * [**Table of contents**](#table-of-contents)
@@ -31,7 +29,7 @@
         * [Fine-mapping results (credible set variants only)](#fine-mapping-results-credible-set-variants-only)
         * [Fine-mapping results (gene-level merged credible sets)](#fine-mapping-results-gene-level-merged-credible-sets)
 
-<br><br><br>
+<br><br>
 
 # Overview
 
@@ -43,7 +41,7 @@ For MAGE v0.1, QTL mapping is limited to the autosomes; there are no results for
 
 All QTL summary statistics are available in tabixed format in the **[MAGE dropbox]()**. All genomic coordinates are relative to the GRCh38 reference.
 
-<br><br><br>
+<br><br>
 
 # eQTL mapping results
 
@@ -207,11 +205,15 @@ In the first step, we used FastQTL to identify sGenes and significant nominal as
 
 In the second step, we used SuSiE to perform fine-mapping on all sGenes identified in the FastQTL permutation pass. We ran SuSiE for each intron of each sGene, to identify independent credible causal sets for each intron. Then, for each sGene, we created gene-level merged credible sets by iteratively merging any overlapping (i.e. contains the same variant) intron-level credible sets for that gene.
 
+<br><br>
+
 ## Splicing filtered gene list
 
 A list of the genes that passed splicing filtering and were used for sQTL mapping is available in [`splicing_filteredGenes.MAGE.v0.1.txt.gz`](), along with it's corresponding tabix index.
 
 The genomic coordinates listed in this file are BED-style: 0-based, half-open.
+
+<br><br>
 
 ## Summary of sQTL mapping results
 
@@ -226,6 +228,8 @@ A summary of the sQTL mapping results for the filtered genes is available in [`s
 8. `is_sGene`: Whether the gene reached significance in the FastQTL permutation pass (5% FDR)
 9. `intronFinemappedCredibleSets`: For the genes that reached significance in the permutation pass (i.e., sGenes), the sum of the number of fine-mapped credible causal sets for each intron of that gene
 10. `mergedFinemappedCredibleSets`: For the genes that reached significance in the permutation pass (i.e., sGenes), the number of merged credible causal sets
+
+<br><br>
 
 ## FastQTL nominal results
 
@@ -300,6 +304,8 @@ Associations for which `pval_nominal < pval_nominal_threshold` were defined as s
 Nominal pass results for ONLY the significant nominal associations are available in [`sQTL_FastQTL_results.nominal_pass.significantAssociations.MAGE.v0.1.txt.gz`](). The columns of this file are as described in the [All nominal pass results]() section above.
 
 A tabix index is also provided for this file.
+
+<br><br>
 
 ## SuSiE fine-mapping results
 
