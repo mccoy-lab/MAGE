@@ -33,7 +33,11 @@
 
 # Overview
 
-eQTL and sQTL mapping results for the MAGE v0.1 data set are publicly available for download through Dropbox. For eQTL and sQTL mapping, a nominal pass was performed with [FastQTL](https://github.com/francois-a/fastqtl). To identify eGenes and sGenes, as well as significant nominal associations, a permutation pass was performed, also with [FastQTL](https://github.com/francois-a/fastqtl).
+eQTL and sQTL mapping results for the MAGE v0.1 data set are publicly available for download through Dropbox.
+
+<img src="/images/dropbox.png" width="25"> **[MAGEv.01 QTL mapping results]()**
+
+For eQTL and sQTL mapping, a nominal pass was performed with [FastQTL](https://github.com/francois-a/fastqtl). To identify eGenes and sGenes, as well as significant nominal associations, a permutation pass was performed, also with [FastQTL](https://github.com/francois-a/fastqtl).
 
 After identifying eGenes and sGenes with FastQTL, fine-mapping was performed with [SuSiE](https://github.com/stephenslab/susieR) to identify independent credible causal sets of variants for each e/sGene.
 
