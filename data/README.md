@@ -6,7 +6,7 @@ Publicly accessible data for MAGE (QTL results, expression/splicing quantificati
 
 ## QTL results
 
-<img src="/images/dropbox.png" width="15" style="float: bottom;"> **[MAGEv.01 Data](https://www.dropbox.com/home/MAGE/v0.1/QTL_results)**
+<img src="/images/dropbox.png" width="15" style="float: bottom;"> **[MAGEv.01 QTL Results](https://www.dropbox.com/home/MAGE/v0.1/QTL_results)**
 
 A full description of the available QTL results files is in [QTL_results.md](/data/QTL_results.md)
 
