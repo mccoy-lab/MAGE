@@ -3,7 +3,7 @@
 # Table of contents
 
 * [**Table of contents**](#table-of-contents)
-* [**Overview *need link***]
+* [**Overview**]
 * [**Expression**](#expression)
 	* [Gene expression (counts)](#gene-expression-counts)
 	* [Gene expression (mu)](#gene-expression-mu)
@@ -59,11 +59,9 @@ Two-stage regression results for estimating the proportion of variance explained
 
 In summary, the following linear models are used for regression:
 <br>
-$$VST(expression) ~ sex + batch + u$$
-<br>
-$$u ~ continentalGroup + v_1$$
-<br>
-$$u ~ population + v_2$$
+$$`VST(expression) ~ sex + batch + u`$$
+$$`u ~ continentalGroup + v_1`$$
+$$`u ~ population + v_2`$$
 <br>
 Where *u* are the residuals from the first-stage regression, and *v* are the residuals from the second-stage regressions.
 
@@ -76,8 +74,8 @@ A summary of these results are presented in `PVE_regressions.csv`. The columns i
 6. `stage2a.SSR_res`: Residual sum of squares ($v_1$) in stage-two regression 
 7. `stage2b.SSR_population`: Regression sum of squares for *population* in stage-two regression
 8. `stage2b.SSR_res`: Residual sum of squares ($v_2$) in stage-two regression
-9. `continentalGroupPVE`: Proportion of variation explained by *continentalGroup* fixed-effect ($`SSR(continentalGroup)/SST(stage-two regression)`$)
-10. `populationPVE`: Proportion of variation explained by *continentalGroup* fixed-effect ($`SSR(population)/SST(stage-two regression)`$)
+9. `continentalGroupPVE`: Proportion of variation explained by *continentalGroup* fixed-effect ($`SSR_continentalGroup/SST`$)
+10. `populationPVE`: Proportion of variation explained by *continentalGroup* fixed-effect ($`SSR_population/SST`$)
 
 <br><br>
 
@@ -92,8 +90,8 @@ To test whether the proportion of variance in gene expression explained by conti
 
 ## Proportion of variance explained by sequencing batch
 We estimated the proportion of variation explained by sequencing *batch* and *sample* using the 24 samples sequenced in triplicate. For this test, we used a VST matrix of autosomal gene counts generated from the [raw count matrix without running `collapseReplicates`](#expression). A type-2 ANOVA was performed using the following linear-regression model:
-<br><br>
-$$VST(expression) ~ batch + sample$$  
+<br>
+$$`VST(expression) ~ batch + sample`$$  
 <br>
 The proportion of variance explained by *batch* and *sample* were computed as the regression sum of squares (for *batch* or *sample*, respectively) divided by the total sum of squares.
 
