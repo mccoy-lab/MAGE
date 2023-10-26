@@ -18,9 +18,9 @@
 
 # Overview
 
-Gene expression matrices and global trends in gene expression results for the MAGE v0.1 data set are publicly available for download through Dropbox.
-
 <img src="/images/dropbox.png" width="15" style="float: bottom;"> **[MAGEv.01 Expression and global trend data]()**
+
+Gene expression matrices and global trends in gene expression results for the MAGE v0.1 data set are publicly available for download through Dropbox.
 
 <br><br>
 
@@ -52,9 +52,12 @@ Gene expression quantification was performed using [Salmon](https://salmon.readt
 
 # Expression variation
 
+<img src="/images/dropbox.png" width="15" style="float: bottom;"> **[MAGEv.01 Expression variation]()**
+
 Using the VST expression matrix described above, we quantified the expression trends at the biological scale of populations as well as the technical scale of sequence batches. 
 
 ## Proportion of variance explained by population
+
 Two-stage regression results for estimating the proportion of variance explained by *continentalGroup* label (e.g., SAS & AMR) and *population* label (e.g., LWK & JPT). After regressing out the effects of *sex* and *batch* on expression (using the VST expression matrix), residuals were then regressed, separately, against *continentalGroup* and *population*. Proportion of variation explain was then calculated as the SSR/SST.
 
 In summary, the following linear models are used for regression:
@@ -74,12 +77,13 @@ A summary of these results are presented in `PVE_regressions.csv`. The columns i
 6. `stage2a.SSR_res`: Residual sum of squares ($v_1$) in stage-two regression 
 7. `stage2b.SSR_population`: Regression sum of squares for *population* in stage-two regression
 8. `stage2b.SSR_res`: Residual sum of squares ($v_2$) in stage-two regression
-9. `continentalGroupPVE`: Proportion of variation explained by *continentalGroup* fixed-effect ($`SSR_continentalGroup/SST`$)
-10. `populationPVE`: Proportion of variation explained by *continentalGroup* fixed-effect ($`SSR_population/SST`$)
+9. `continentalGroupPVE`: Proportion of variation explained by *continentalGroup* fixed-effect ($`SSR_{continentalGroup}/SST`$)
+10. `populationPVE`: Proportion of variation explained by *continentalGroup* fixed-effect ($`SSR_{population}/SST`$)
 
 <br><br>
 
 ## Population permutation test
+
 To test whether the proportion of variance in gene expression explained by continental group and/or population was greater than expected by chance, we leveraged permutation tests by shuffling *continentalGroup* and *population* labels (with replacement) and repeated the [two-stage ANOVA above](#proportion-of-variance-explained-by-population) to compute a null distribution of expected proportion of variance explained (*n = 1000 replicates*).
 
 `PVE_permutations.csv` contains a summary of these permutation results, where the mean of proportion of variance explained across all genes was computed for each permutation. Each row of this table corresponds to an independent permutation procedure, and the two columns are:
@@ -89,6 +93,7 @@ To test whether the proportion of variance in gene expression explained by conti
 <br><br>
 
 ## Proportion of variance explained by sequencing batch
+
 We estimated the proportion of variation explained by sequencing *batch* and *sample* using the 24 samples sequenced in triplicate. For this test, we used a VST matrix of autosomal gene counts generated from the [raw count matrix without running `collapseReplicates`](#expression). A type-2 ANOVA was performed using the following linear-regression model:
 <br>
 $$`VST(expression) ~ batch + sample`$$  
@@ -108,8 +113,11 @@ The proportion of variance explained by *batch* and *sample* were computed as th
 <br><br>
 
 # Relationship between fixation index and differential expression
-To investigate the relationship between differential gene expression and population differentiation in allele frequency, we computed [Weir & Cockerham's $F_st$](https://github.com/vcflib/vcflib/blob/master/doc/wcFst.md) for each finemapped eQTL. These results are presented in `Finemapped_Fst.csv` with the following columns:
+
+<img src="/images/dropbox.png" width="15" style="float: bottom;"> **[MAGEv.01 Expression variation]()**
+
+To investigate the relationship between differential gene expression and population differentiation in allele frequency, we computed [Weir & Cockerham's $F_{st}$](https://github.com/vcflib/vcflib/blob/master/doc/wcFst.md) for each finemapped eQTL. These results are presented in `Finemapped_Fst.csv` with the following columns:
 1. `geneID`: The [Ensembl](https://useast.ensembl.org/Homo_sapiens/Info/Index) gene ID
-2. `continentalGroup`: Foreground population for $F_st$ calculation
+2. `continentalGroup`: Foreground population for $F_{st}$ calculation
 3. `mean_wcFst`: Mean $F_st$ across all finemapped eQTLs for the focal eGene, where the foreground allele frequency is measured for the population measured in the `continentalGroup` column, and the background allele frequency is measured in the remaining four `continentalGroup` categories (e.g., AFR vs. EUR + SAS + EAS + AMR). 
 4. `DEpadj`: Differential gene expression adjusted p-value (FDR = 0.05) computed for focal population against mean expression of all other populations (e.g., AFR vs. EUR + SAS + EAS + AMR)
