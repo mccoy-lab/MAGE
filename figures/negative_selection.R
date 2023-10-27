@@ -205,16 +205,19 @@ eqtl_effects_melted[, is_constrained := as.character("NA")]
 eqtl_effects_melted[value == TRUE, is_constrained := "Top 10%"]
 eqtl_effects_melted[value == FALSE, is_constrained := "Lower 90%"]
 
-pli_eqtl_p <- t.test(log(abs(eqtl_effects[pLI == TRUE]$log2_aFC)), log(abs(eqtl_effects[pLI == FALSE]$log2_aFC)))$p.value
-loeuf_eqtl_p <- t.test(log(abs(eqtl_effects[LOEUF == TRUE]$log2_aFC)), log(abs(eqtl_effects[LOEUF == FALSE]$log2_aFC)))$p.value
-pHaplo_eqtl_p <- t.test(log(abs(eqtl_effects[pHaplo == TRUE]$log2_aFC)), log(abs(eqtl_effects[pHaplo == FALSE]$log2_aFC)))$p.value
-pTriplo_eqtl_p <- t.test(log(abs(eqtl_effects[pTriplo == TRUE]$log2_aFC)), log(abs(eqtl_effects[pTriplo == FALSE]$log2_aFC)))$p.value
-hs_eqtl_p <- t.test(log(abs(eqtl_effects[hs == TRUE]$log2_aFC)), log(abs(eqtl_effects[hs == FALSE]$log2_aFC)))$p.value
-rvis_eqtl_p <- t.test(log(abs(eqtl_effects[RVIS == TRUE]$log2_aFC)), log(abs(eqtl_effects[RVIS == FALSE]$log2_aFC)))$p.value
+pli_eqtl_p <- wilcox.test(log(abs(eqtl_effects[pLI == TRUE]$log2_aFC)), log(abs(eqtl_effects[pLI == FALSE]$log2_aFC)))$p.value
+loeuf_eqtl_p <- wilcox.test(log(abs(eqtl_effects[LOEUF == TRUE]$log2_aFC)), log(abs(eqtl_effects[LOEUF == FALSE]$log2_aFC)))$p.value
+pHaplo_eqtl_p <- wilcox.test(log(abs(eqtl_effects[pHaplo == TRUE]$log2_aFC)), log(abs(eqtl_effects[pHaplo == FALSE]$log2_aFC)))$p.value
+pTriplo_eqtl_p <- wilcox.test(log(abs(eqtl_effects[pTriplo == TRUE]$log2_aFC)), log(abs(eqtl_effects[pTriplo == FALSE]$log2_aFC)))$p.value
+hs_eqtl_p <- wilcox.test(log(abs(eqtl_effects[hs == TRUE]$log2_aFC)), log(abs(eqtl_effects[hs == FALSE]$log2_aFC)))$p.value
+rvis_eqtl_p <- wilcox.test(log(abs(eqtl_effects[RVIS == TRUE]$log2_aFC)), log(abs(eqtl_effects[RVIS == FALSE]$log2_aFC)))$p.value
 
 pval_eqtl_dt <- data.table(variable = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVIS"),
                       pval = c(pli_eqtl_p, loeuf_eqtl_p, pHaplo_eqtl_p, pTriplo_eqtl_p, hs_eqtl_p, rvis_eqtl_p),
                       is_constrained = "Top 10%")
+
+pval_eqtl_dt$variable <- factor(pval_eqtl_dt$variable, 
+                            levels = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVIS"))
 
 eqtl_effects_melted$variable <- factor(eqtl_effects_melted$variable, 
                          levels = c("pLI", "LOEUF", "pHaplo", "pTriplo", "hs", "RVIS"))
@@ -228,7 +231,7 @@ lower_panel <- ggplot(data = eqtl_effects_melted, aes(x = abs(log2_aFC), fill = 
   theme(legend.position = "none") +
   ylab("Density")  +
   xlab(bquote('Absolute eQTL effect size (|' ~log[2]~(aFC)~'|)')) +
-  geom_text(data = pval_eqtl_dt, aes(x = 1.7, y = 2.8, 
+  geom_text(data = pval_eqtl_dt, aes(x = 4, y = 2.8, 
                                      label = paste("p =", formatC(pval, format = "e", digits = 2))), 
             color = "black", size = 3)
 
