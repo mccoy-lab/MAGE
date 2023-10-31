@@ -1,4 +1,6 @@
-# MAGE: a resource for Multi-ancestry Analysis of Gene Expression
+![MAGE sampled populations](/images/MAGE_population_map.png)
+
+# MAGE: Multi-ancestry Analysis of Gene Expression
 
 MAGE comprises RNA-seq data from lymphoblastoid cell lines derived from 731 individuals from the [1000 Genomes Project (1KGP)](https://doi.org/10.1038/nature15393), representing 26 globally-distributed populations across five continental groups. These data offer a large, geographically diverse, open access resource to facilitate studies of the distribution, genetic underpinnings, and evolution of variation in human transcriptomes and include data from several ancestry groups that were poorly represented in previous studies.
 
