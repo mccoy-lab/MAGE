@@ -3,7 +3,7 @@
 # Table of contents
 
 * [**Table of contents**](#table-of-contents)
-* [**Overview**]
+* [**Overview**](#overview)
 * [**Expression**](#expression)
 	* [Gene expression (counts)](#gene-expression-counts)
 	* [Gene expression (mu)](#gene-expression-mu)
