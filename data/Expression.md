@@ -46,7 +46,7 @@ Gene expression quantification was performed using [Salmon](https://salmon.readt
 
 ## Gene expression (VST)
 
-`expression.vst.csv`: Blind variance stabilized transformation gene-level count data generated using the [`vst`](https://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#variance-stabilizing-transformation) command in `DESeq2`. As the VST matrix is normalized across the expression matrix, accounting for normalization factors, gene-wise dispersion, and removed dependence of variance on the mean without *a priori* knowledge of the design matrix (`blind=TRUE`), these data were used in subsequent analyses to estimate global trends in gene expression. Columns correspond to samples and rows to gene.
+`expression.vst.csv`: Blind variance stabilized transformation (VST) gene-level count data generated using the [`vst`](https://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#variance-stabilizing-transformation) command in `DESeq2`. As the VST matrix is normalized across the expression matrix, accounting for normalization factors, gene-wise dispersion, and removed dependence of variance on the mean without *a priori* knowledge of the design matrix (`blind=TRUE`), these data were used in subsequent analyses to estimate global trends in gene expression. Columns correspond to samples and rows to gene.
 
 <br><br>
 
