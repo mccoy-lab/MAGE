@@ -20,6 +20,6 @@ The high-coverage variant calls used for QTL mapping were previously generated b
 
 ## Replicating Analyses
 
-"<b style='color:blue;'>Work in progress</b>
+<b><font color="red">Work in progress</font></b>
 
 All code to replicate analyses are in the `code/` and  `figures/` directories.
