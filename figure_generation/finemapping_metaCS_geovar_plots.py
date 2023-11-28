@@ -140,7 +140,7 @@ for g in [geovar_kgpex_eVariants_tot,geovar_kgpex_eVariants_noglobal, geovar_kgp
 
 # The actual plotting code here ...
 geovar_plot_eVariants_tot = GeoVarPlot()
-geovar_plot_eVariants_tot.add_data_geovar(geovar_kgpex_eVariants_rep)
+geovar_plot_eVariants_tot.add_data_geovar(geovar_kgpex_eVariants_tot)
 
 geovar_plot_eVariants_noglobal = GeoVarPlot()
 geovar_plot_eVariants_noglobal.add_data_geovar(geovar_kgpex_eVariants_noglobal)
