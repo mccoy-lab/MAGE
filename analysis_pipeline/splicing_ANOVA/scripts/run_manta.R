@@ -8,10 +8,13 @@ suppressPackageStartupMessages({
 })
 
 
-#================================#
-# Define modified manta function #
-#================================#
+#==================#
+# Define functions #
+#==================#
 
+# The default manta function hits errors when calculating small p-values.
+# This version of the function is identical to the official manta function
+# but does not calculate p-values
 manta <- function(formula, data, transform = "none", type = "II", 
 								contrasts = NULL, subset = NULL, fit = FALSE){
 	
@@ -51,7 +54,7 @@ manta <- function(formula, data, transform = "none", type = "II",
 		Y <- sqrt(response)
 	} else if (transform == "log"){
 		if (any(response <= 0)) {
-			stop("'log' transformyation requires all response values > 0")
+			stop("'log' transformation requires all response values > 0")
 		}
 		Y <- log(response)
 	}

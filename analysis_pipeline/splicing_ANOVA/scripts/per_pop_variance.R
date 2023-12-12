@@ -140,13 +140,42 @@ manta <- function(formula, data, transform = "none", type = "II",
 	return(out)
 }
 
-run_manta.permutations <- function(chunk.i, usage_df, nperms) {
-	
-	#===========================#
-	# Regress out batch and sex #
-	#===========================#
+cluster_variance <- function(data, transform = "none") {
 
-	cluster_residuals <- list()
+	transform <- match.arg(transform, c("none", "sqrt", "log"))
+
+	if(transform == "none"){
+		Y <- data
+	} else if (transform == "sqrt"){
+		if (any(data < 0)) {
+			stop("'sqrt' transformation requires all response values >= 0")
+		}
+		Y <- sqrt(data)
+	} else if (transform == "log"){
+		if (any(data <= 0)) {
+			stop("'log' transformation requires all response values > 0")
+		}
+		Y <- log(data)
+	}
+
+	Y <- scale(Y, center = TRUE, scale = FALSE)
+
+	SSCP.e <- crossprod(Y)
+	SS.e <- sum(diag(SSCP.e))
+	df.e <- nrow(Y) -1
+
+	variance <- SS.e / df.e
+
+	return(variance)
+}
+
+run_manta.var <- function(usage_df) {
+	
+	contGroups <- sort(as.character(unique(tx_cov_df$continentalGroup)))
+	pops <- sort(as.character(unique(tx_cov_df$population)))
+
+	contGroup_var_df <- data.frame(matrix(ncol=1+length(contGroups), nrow=0, dimnames=list(NULL, c("clusterID", contGroups))))
+	pop_var_df <- data.frame(matrix(ncol=1+length(pops), nrow=0, dimnames=list(NULL, c("clusterID", pops))))
 
 	for (target_cluster in unique(usage_df$cluster)) {
 
@@ -162,7 +191,7 @@ run_manta.permutations <- function(chunk.i, usage_df, nperms) {
 		prepared_cluster_df <- na.omit(proportion_cluster_df)
 		cluster_cov_df <- tx_cov_df[rownames(prepared_cluster_df), ]
 
-		# Regress out batch and sex
+		# Step 1: Regress out batch and sex
 		confounding_results <- manta(prepared_cluster_df ~ ., data = subset(cluster_cov_df, select=c('batch', 'sex')), fit=TRUE, transform='sqrt')
 		confounding_aov <- confounding_results$aov.tab
 
@@ -173,65 +202,50 @@ run_manta.permutations <- function(chunk.i, usage_df, nperms) {
 
 		confounding_residuals <- confounding_results$fit$residual
 
-		cluster_residuals[[target_cluster]] <- list(total_SS=total_SS, batch_SS=batch_SS, sex_SS=sex_SS, residual_SS=residual_SS, residuals=confounding_residuals, cluster_cov_df=cluster_cov_df)
+		# Step 2: Calculate variance within each superpop
+		cluster_contGroup_vars <- unlist(lapply(contGroups, FUN=function(pop) {
+			pop_samples <- rownames(tx_cov_df[tx_cov_df$continentalGroup == pop, ])
+			intersected_samples <- intersect(pop_samples, rownames(confounding_residuals))
+			pop_residuals <- confounding_residuals[intersected_samples, ]
+			return(cluster_variance(pop_residuals, transform="none"))
+			}))
+
+		contGroup_var_df[target_cluster, ] <- c(target_cluster, cluster_contGroup_vars)
+
+		# Step 3: Calculate variance within each subpop
+		cluster_pop_vars <- unlist(lapply(pops, FUN=function(pop) {
+			pop_samples <- rownames(tx_cov_df[tx_cov_df$population == pop, ])
+			intersected_samples <- intersect(pop_samples, rownames(confounding_residuals))
+			pop_residuals <- confounding_residuals[intersected_samples, ]
+			return(cluster_variance(pop_residuals, transform="none"))
+			}))
+
+		pop_var_df[target_cluster, ] <- c(target_cluster, cluster_pop_vars)
 
 	}
 
-	#==================#
-	# Run permutations #
-	#==================#
+	return(list(contGroup_var_df = contGroup_var_df, pop_var_df = pop_var_df))
+}
 
-	for (perm.i in 1:nperms) {
+rbind_custom <- function(LL1, LL2) {
 
-		outFile <- paste0(args$outPrefix, '_chunk', chunk.i, '_perm', perm.i, '.tmp.txt')
-		PVE_df <- data.frame(matrix(ncol=7, nrow=0, dimnames=list(NULL, c("clusterID", "total_SS", "batch_SS", "sex_SS", "batch_sex_residual_SS", "continentalGroup_SS", "population_SS"))))
+  contGroup_var_df <- rbind(LL1$contGroup_var_df, LL2$contGroup_var_df)
+  pop_var_df <- rbind(LL1$pop_var_df, LL2$pop_var_df) 
+  return(list(contGroup_var_df = contGroup_var_df, pop_var_df = pop_var_df))
 
-		# Permute population labels
-		trans_tx_cov_df <- transform(tx_cov_df, continentalGroup=sample(continentalGroup), population=sample(population))
-
-		for (target_cluster in unique(usage_df$cluster)) {
-
-			total_SS <- cluster_residuals[[target_cluster]][['total_SS']]
-			batch_SS <- cluster_residuals[[target_cluster]][['batch_SS']]
-			sex_SS <- cluster_residuals[[target_cluster]][['sex_SS']]
-			residual_SS <- cluster_residuals[[target_cluster]][['residual_SS']]
-			confounding_residuals <- cluster_residuals[[target_cluster]][['residuals']]
-
-			# Remove samples with 0 counts
-			cluster_cov_df <- trans_tx_cov_df[rownames(confounding_residuals), ]
-
-			# Run regression on residuals from Step 1 with continentalGroup
-			continentalGroup_results <- manta(confounding_residuals ~ ., data = subset(cluster_cov_df, select='continentalGroup'), fit=TRUE)
-			continentalGroup_aov <- continentalGroup_results$aov.tab
-
-			continentalGroup_SS <- continentalGroup_aov['continentalGroup', 'Sum Sq']
-
-			# Run regression on residuals from Step 1 with population
-			population_results <- manta(confounding_residuals ~ ., data=subset(cluster_cov_df, select='population'), fit=TRUE)
-			population_aov <- population_results$aov.tab
-
-			population_SS <- population_aov['population', 'Sum Sq']
-
-			# Add cluster to PVE dataframe
-			PVE_df[target_cluster, ] = c(target_cluster, total_SS, batch_SS, sex_SS, residual_SS, continentalGroup_SS, population_SS)
-		}
-
-		write.table(PVE_df, file=outFile, quote=FALSE, sep='\t', row.names=FALSE, col.names=TRUE)
-
-	}
 }
 
 
-#===================#
-# Collect arguments #
-#===================#
+#===============#
+# Set filepaths #
+#===============#
 
-p <- arg_parser("Calculate proportion of splicing varition explained by population")
-p <- add_argument(p, "--splicing_frac", short="-f", help="Intron exicision fractions from Leafcutter (the unfiltered file is typically \"[prefix]_perind.counts.gz\"). These are expected to be filtered prior to running this script. No further filtering is done in this script.")
-p <- add_argument(p, "--covariates", short="-c", help="Table of sample covariates (batch, sex, continentalGroup, population). This should be for the same set of sample in the leafcutter counts file.")
-p <- add_argument(p, "--perms", short="-p", type="integer", help="Number of permutations to run")
+p <- arg_parser("Calculate splicing variation within each population")
+p <- add_argument(p, "--splicing_frac", short="-f", help="Intron exicision fractions from Leafcutter (typically \"[prefix]_perind.counts.gz\". These are expected to be processed prior to running this script. No further filtering is done in this script.")
+p <- add_argument(p, "--covariates", short="-c", help="Table of sample covariates (batch, sex, superpop, subpop). This should be for the same set of sample in the leafcutter counts file.")
 p <- add_argument(p, "--threads", short="-t", type="integer", default=1, help="Number of threads to run on")
-p <- add_argument(p, "--outPrefix", short="-o", help="Prefix of file to write output table to. This table will have a breakdown of sum of squares for each cluster.")
+p <- add_argument(p, "--contGroupOut", short="-O", help="Name of file to write continental group variance output table to.")
+p <- add_argument(p, "--popOut", short="-o", help="Name of file to write population variance output table to.")
 args <- parse_args(p)
 
 
@@ -241,7 +255,7 @@ args <- parse_args(p)
 
 cat('\n\tReading in data... ')
 
-tx_usage_df <- read.table(file=args$splicing_frac, sep='\t', header=TRUE)
+tx_usage_df <- read.table(file=args$splicing_frac, sep='\t', header=TRUE, nrows=10001)
 
 clusters <- unique(tx_usage_df$cluster)
 
@@ -262,11 +276,11 @@ tx_cov_df <- tx_cov_df[colnames(tx_usage_df)[3:ncol(tx_usage_df)], ]
 cat('Done.\n')
 
 
-#========================#
-# Run ANOVA permutations #
-#========================#
+#===========#
+# Run ANOVA #
+#===========#
 
-cat('\n\tRunning MANTA for ', length(clusters), ' clusters (', nrow(tx_usage_df), ' introns) and ', args$perms, ' permutations on ', args$threads, ' threads... ', sep='')
+cat('\n\tRunning MANTA to determine within-group variance for ', length(clusters), ' clusters (', nrow(tx_usage_df), ' introns) on ', args$threads, ' threads... ', sep='')
 
 start.time <- Sys.time()
 
@@ -283,37 +297,23 @@ rm(tx_usage_df)
 cl <- makeCluster(args$threads)
 registerDoParallel(cl)
 
-
-invisible(foreach(i=1:args$threads) %dopar% {
-	run_manta.permutations(i, chunks[[i]], args$perms)
-})
+results <- foreach(i=1:args$threads, .combine=rbind_custom) %dopar% {
+	run_manta.var(chunks[[i]])
+}
 
 stopCluster(cl)
+
+contGroup_var_df <- results$contGroup_var_df
+pop_var_df <- results$pop_var_df
 
 end.time <- Sys.time()
 tot.time <- round(difftime(end.time, start.time, units='secs'), 2)
 
 cat('Done.\n\tTotal time: ', tot.time, 's\n', sep='')
+cat('\n\tWriting output... ')
 
-
-#==============#
-# Merge chunks #
-#==============#
-
-cat('\n\tMerging chunks... ')
-
-for (perm.i in 1:args$perms) {
-	outFile <- paste0(args$outPrefix, '.perm', perm.i, '.txt')
-	PVE_df <-data.frame(matrix(ncol=7, nrow=0, dimnames=list(NULL, c("clusterID", "total_SS", "batch_SS", "sex_SS", "batch_sex_residual_SS", "continentalGroup_SS", "population_SS"))))
-
-	for (chunk.i in 1:args$threads) {
-		inFile <- paste0(args$outPrefix, '_chunk', chunk.i, '_perm', perm.i, '.tmp.txt')
-		in_df <- read.table(file=inFile, sep='\t', header=TRUE)
-		PVE_df <- rbind(PVE_df, in_df)
-		file.remove(inFile)
-	}
-
-	write.table(PVE_df, file=outFile, quote=FALSE, sep='\t', row.names=FALSE, col.names=TRUE)
-}
+# Write to output
+write.table(contGroup_var_df, file=args$contGroupOut, quote=FALSE, sep='\t', row.names=FALSE, col.names=TRUE)
+write.table(pop_var_df, file=args$popOut, quote=FALSE, sep='\t', row.names=FALSE, col.names=TRUE)
 
 cat('Done.\n\n\tAll done!\n\n')
