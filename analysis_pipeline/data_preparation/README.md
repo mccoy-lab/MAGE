@@ -5,7 +5,7 @@ This directory contains all the components of the data preparation pipeline used
 2. Quantifying expression from raw reads using Salmon
 3. Alignment with STAR and splicing quantification with Leafcutter
 
-*Note: all analyses were performed on the GRCh38 reference*<br><br>
+*Note: all analyses were performed using the GRCh38 reference*<br><br>
 
 ## Preparing MAGE VCFs
 
