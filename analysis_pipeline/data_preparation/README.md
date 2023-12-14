@@ -19,4 +19,4 @@ Code to perform expression quantification is in the [`expression_quantification`
 
 Expression quantification was performed with raw reads using [Salmon](https://combine-lab.github.io/salmon/) with [GENCODE v38](https://www.gencodegenes.org/human/release_38.html) transcript annotations.
 
-Transcript-level pseudocounts from Salmon were merged to gene-level estimates, filtered, and normalized (normalization depends on downstream application).
+Transcript-level pseudocounts from Salmon were merged to gene-level estimates, filtered, and normalized (normalization depends on downstream application).<br><br>
