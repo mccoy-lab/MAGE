@@ -57,13 +57,22 @@ bgzip $tmp_correctedExpression
 tabix -p bed $tmp_correctedExpression.gz
 
 
+#=========================#
+# Format expression input #
+#=========================#
+
+tmpExpressionFile=$tmpPrefix.expression.txt
+
+zcat $tmp_correctedExpression | cut -f 4- | awk -v FS="\t" -v OFS="," 'NR==1 {$1="Name"} {$1=$1; print}' | gzip -c > $tmpExpressionFile
+
+
 #===========#
 # Run aFC-n #
 #===========#
 
 afcn.py --vcf $inVCF \
-		--expr $tmp_correctedExpression.gz \
-		--eqtl $tmp_eQTLInpu \
+		--expr $tmpExpressionFile \
+		--eqtl $tmp_eQTLInput \
 		--conf \
 		--output $outFile \
 		--nthreads $threads
