@@ -7,4 +7,4 @@ This directory contains all the components of the data preparation pipeline used
 
 ## Preparing MAGE VCFs
 
-Code to produce MAGE VCFs is in the [subset_VCFs](./subset_VCFs) directory.
+Code to produce MAGE VCFs is in the [subset_VCFs/](subset_VCFs/) directory.
