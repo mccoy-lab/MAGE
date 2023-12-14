@@ -7,4 +7,9 @@ This directory contains all the components of the data preparation pipeline used
 
 ## Preparing MAGE VCFs
 
-Code to produce MAGE VCFs is in the [`subset_VCFs/`](subset_VCFs/) directory.
+Code to produce MAGE VCFs is in the [`subset_VCFs`](subset_VCFs/) directory.
+
+The samples included in MAGE are a subset of the [1000 Genomes Project (1KGP)](https://doi.org/10.1038/nature15393). The [New York Genome Center (NYGC)](https://doi.org/10.1016/j.cell.2022.08.004) previously generated a set of high-quality variant calls for the full 1KGP data set using high-coverage whole genome sequencing, and we generate a MAGE VCF as a subset of the NYGC VCF for these samples (downloaded from the [1KGP FTP site](http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_phased/).
+
+## Expression Quantification
+
