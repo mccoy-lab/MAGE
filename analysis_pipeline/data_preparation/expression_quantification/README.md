@@ -18,7 +18,7 @@ The script takes four arguments:
 4. `outSalmonDir`: Directory to write salmon quantifications to
 
 ### Software requirements
-The script assumes you have `salmon` installed and on your PATH.<br><br>
+No additional software needed.<br><br>
 
 ## Filtering and normalization for eQTL analyses
 
