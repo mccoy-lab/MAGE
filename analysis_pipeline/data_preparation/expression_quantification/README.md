@@ -16,9 +16,7 @@ The script takes four arguments:
 2. `gencodeTranscriptsFasta`: The gencode transcript sequences FASTA file (we used the Gencode v38 file [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.transcripts.fa.gz)
 3. `outIndexDir`: Directory to write salmon index files to
 4. `outSalmonDir`: Directory to write salmon quantifications to
-
-### Software requirements
-No additional software needed.<br><br>
+<br><br>
 
 ## Filtering and normalization for eQTL analyses
 
@@ -33,6 +31,4 @@ The script takes four arguments:
 2. `salmonQuantListFile`: A tab-separated file with paths to Salmon `quant.sf` files from `01_run_salmon.sh`. This files should have two columns: 1) sampleID (to be used in output files) and 2) path to corresponding `quant.sf` file. For eQTL analyses, for each of the 24 samples sequenced in triplicate, we selected only the replicate with the most reads for further analysis.
 3. `outQuantsDir`: Directory to write gene-level filtered expression quantification files to
 4. `outPrefix`: Prefix of output files in `outQuantsDir`
-
-### Software requirements
-No additional software needed.<br><br>
+<br><br>
