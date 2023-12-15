@@ -13,7 +13,7 @@ The `01_run_salmon.sh` script will perform expression quantification with [Salmo
 
 The script takes four arguments:
 1. `fastqListFile`: A tab-separated file with paths to MAGE FASTQ files. This file should have three columns: 1) libraryID, 2) path to pair1 FASTQ file, 3) path to pair2 FASTQ file
-2. `gencodeTranscriptsFasta`: The gencode transcript sequences FASTA file (we used the Gencode v38 file [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.transcripts.fa.gz)
+2. `gencodeTranscriptsFasta`: The gencode transcript sequences FASTA file (we used the Gencode v38 file [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.transcripts.fa.gz))
 3. `outIndexDir`: Directory to write salmon index files to
 4. `outSalmonDir`: Directory to write salmon quantifications to
 <br><br>
