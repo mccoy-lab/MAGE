@@ -8,6 +8,7 @@ fastqListFile=$1 # Three-column tab-separated file with libraryID, path to pair1
 gencodeTranscriptsFasta=$2 #gencode.v38.transcripts.fa.gz
 outIndexDir=$3
 outSalmonDir=$4
+
 threads=8
 
 
