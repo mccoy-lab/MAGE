@@ -191,7 +191,7 @@ For each credible set, we selected a single "lead" variant with the highest PIP 
 8. `geneSymbol`: The [HGNC](https://www.genenames.org/) gene symbol of the tested gene
 9. `variantPIP`: The posterior inclusion probability (PIP) that the lead variant is causal for the tested gene
 10. `variantCredibleSet`: The ID of the credible set to which the lead variant belongs (within the tested gene)
-11. `log2_aFC`: An estimate of the effect of the lead variant on expression of the tested gene as measured by log2(aFC). This value is used as the effect size of the lead variant and it's credible set in downstream analyses
+11. `log2_aFC`: An estimate of the effect of the lead variant on expression of the tested gene as measured by log2(aFC). This value is used as the effect size of the lead variant and its credible set in downstream analyses
 12. `log2_aFC_error`: The standard error of the log2(aFC) estimate
 13. `log2_aFC_c0`: The estimate of the "reference" expression of the tested gene. This describes the expected expression of the gene (as log2[counts]) on a haplotype that contains the reference allele for causal variants
 14. `log2_aFC_min_95_interv`: The lower limit of the 95% CI around the `log2_aFC` estimate
