@@ -8,7 +8,7 @@ This directory contains all the componenets of the *cis*-eQTL mapping pipeline u
 5. Run genotype-continental group interaction test
 <br><br>
 
-## Prepare eQTL-mapping covariates
+## Prepare eQTL mapping covariates
 
 Code to calculate and prepare covariates for eQTL mapping is in the [`get_eQTL_covariates`](get_eQTL_covariates/) directory.
 
