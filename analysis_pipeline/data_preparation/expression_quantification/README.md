@@ -9,7 +9,7 @@ This directory contains code to replicate the expression quantification procedur
 
 ## Transcript-level quantification with Salmon
 
-The `01_run_salmon.sh` script will perform expression quantification with [Salmon](https://combine-lab.github.io/salmon/), an alignment free expression quantification tool. For the intial MAGE publication, we used the [GENCODE v38]() transcript sequences file for expression quantification (download [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.transcripts.fa.gz))
+The `01_run_salmon.sh` script will perform expression quantification with [Salmon](https://combine-lab.github.io/salmon/), an alignment free expression quantification tool. For the intial MAGE publication, we used the [GENCODE v38](https://www.gencodegenes.org/human/release_38.html) transcript sequences file for expression quantification (download [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.transcripts.fa.gz))
 
 The script takes four arguments:
 1. `fastqListFile`: A tab-separated file with paths to MAGE FASTQ files. This file should have three columns: 1) libraryID, 2) path to pair1 FASTQ file, 3) path to pair2 FASTQ file
