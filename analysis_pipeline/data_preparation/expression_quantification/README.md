@@ -5,7 +5,7 @@ This directory contains code to replicate the expression quantification procedur
 2. Filtering and normalization for eQTL mapping analysis
 3. Filtering and normalization for Differential Expression analyses
 
-*Note: these analyses steps should be run in order*<br><br>
+*Note: these steps should be run in order*<br><br>
 
 ## Transcript-level quantification with Salmon
 
