@@ -7,7 +7,7 @@
 ratiosFile=$1 # Filtered splicing ratios file from Leafcutter
 metadataFile=$2 # Tab-separated file with sample metadata: (at least batch, sex, continentalGroup, and population)
 outContGroupFile=$3 # File to write within-continental group variance results to
-outPopFile=$3 # File to write within-population variance results to
+outPopFile=$4 # File to write within-population variance results to
 
 threads=16
 
