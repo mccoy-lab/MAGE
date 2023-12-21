@@ -6,13 +6,14 @@ This directory contains code to replicate eQTL effect size estimation done for t
 
 The `01_run_aFCn.sh` script formats inputs for and runs the aFC-n tool to calculate log2(aFC) effect sizes for each lead variant from SuSiE.
 
-The script takes six arguments:
+The script takes seven arguments:
 1. `leadHitSummaryFile`: This should be the lead hit summary output file from the ['run_susie`](../run_susie/) step
 2. `variantInfoFile`: Tab-separated file with position info for SuSiE lead eQTLs. The file must have header row. First column must be the variantID as it appears in the SuSiE output. It must also contain at least a "CHROM" column and a (1-based) "POS" column
 3. `inVCF`: The same VCF file used for eQTL mapping and fine-mapping. This should be the `autosomal.MAGE.v0.1.vcf.gz` file created in the [`subset_VCFs`](../../data_preparation/subset_VCFs/) step
 4. `expressionBed`: A BED file containing log2 DESeq2-normalized pseudocounts. This is the `<prefix>.filtered.DESeq2-normalized-logged-pseudocounts.bed.gz` file created in the [`expression_quantification`](../../data_preparation/expression_quantification/) step
 5. `covFile`: The same covariate file used eQTL mapping and fine-mapping. This is the `.tab.gz` file created in the [`get_eQTL_covariates`](../get_eQTL_covariates/) step
-6. `outFile`: The file to write output log2(aFC) results to
+6. `out_eQTLs`: This is a four-column tab-delimited file describing the eQTLs to test with aFC-n. It is used as input for both aFC-n and the [interaction test](../run_interaction_test/)
+7. `out_aFCnFile`: The file to write output log2(aFC) results to
 
 ### Software requirements
 
