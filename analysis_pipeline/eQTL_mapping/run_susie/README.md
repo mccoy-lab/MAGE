@@ -29,7 +29,7 @@ The script takes four arguments:
 2. `outCSSummary`: File to write credible set-level summary of SuSiE results
 3. `outFullSNPSummary`: File to write full SNP-level results to
 4. `outSigSNPSummary`: A subset of `outFullSNPSummary` containing only the eQTLs that are in a SuSiE credible set
-5. `outLeadHitSummary`: A subset of `outLeadGitSummary` containing only a single eQTL with the highest PIP from each credible set.
+5. `outLeadHitSummary`: A subset of `outSigSNPSummary` containing only a single eQTL with the highest PIP from each credible set.
 
 **Note: The `outLeadHitSummary` file  is the file used for most downstream analyses**
 
