@@ -37,5 +37,5 @@ The script takes four arguments:
 1. `pcaEigenvec`: The `<prefix>.eigenvec` file created by the `01_get_genotype_PCs.sh` script
 2. `peerX`: The `X.csv` file created by the `02_get_PEER_covariates.sh` script
 3. `addCovFile`: A tab-separated file with additional covariates to be included in the final covariate file. There should be one line per sample, one column per covariate. The first column should be the sample IDs. For the initial MAGE publication, we included only sample sex as an additional covariate (i.e. in addition to genotype PCs and PEER factors)
-4. `outFile`: The formatted output file, to be used for eQTL mapping with FastQTL
+4. `outPrefix`: The prefix of the formatted output file, to be used for eQTL mapping with FastQTL
 <br><br>
