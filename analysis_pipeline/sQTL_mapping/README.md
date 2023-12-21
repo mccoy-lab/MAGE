@@ -10,7 +10,7 @@ This directory contains all the componenets of the *cis*-sQTL mapping pipeline u
 
 Code to calculate and prepare covariates for sQTL mapping is in the [`get_sQTL_covariates`](get_sQTL_covariates/) directory.
 
-For *cis*-eQTL mapping, we included sample sex, the top five genotype PCs, and 15 [PEER factors](https://doi.org/10.1038%2Fnprot.2011.457) as covariates. The number of genotype PCs was chosen based on the proportion of genetic variance explained and their correlation with population labels. The number of PEER factors was chosen based on optimizations previously performed by the GTEx consortium.<br><br>
+For *cis*-e=sQTL mapping, we included sample sex, the top five genotype PCs, and 15 [PEER factors](https://doi.org/10.1038%2Fnprot.2011.457) as covariates. The number of genotype PCs was chosen based on the proportion of genetic variance explained and their correlation with population labels. The number of PEER factors was chosen based on optimizations previously performed by the GTEx consortium.<br><br>
 
 ## Nominal and Permutation pass with FastQTL
 
