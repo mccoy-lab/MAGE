@@ -6,9 +6,8 @@
 
 ratiosFile=$1 # Filtered splicing ratios file from Leafcutter
 metadataFile=$2 # Tab-separated file with sample metadata: (at least batch, sex, continentalGroup, and population)
-nPerms=$3 # Number of permutations to run for each cluster
-outDir=$4 # Directory to write MANTA permutation results to
-outPrefix=$5 # Prefix of output manta files
+outDir=$3 # Directory to write MANTA permutation results to
+outPrefix=$4 # Prefix of output manta files
 
 perms=1000
 threads=16
