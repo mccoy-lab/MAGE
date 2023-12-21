@@ -31,4 +31,6 @@ The script takes four arguments:
 4. `outSigSNPSummary`: A subset of `outFullSNPSummary` containing only the eQTLs that are in a SuSiE credible set
 5. `outLeadHitSummary`: A subset of `outLeadGitSummary` containing only a single eQTL with the highest PIP from each credible set.
 
-**Note: The `outLeadHitSummary` file  is the file used for most downstream analyses**<br><br>
+**Note: The `outLeadHitSummary` file  is the file used for most downstream analyses**
+
+After running the `02_collate_results.sh` script, we reccomend either compressing or deleting the `outDir` directory from `01_run_susie.sh`, as it is likely to be quite large, and better represented by the summary files created by the `02_collate_results.sh` script.<br><br>
