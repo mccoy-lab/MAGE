@@ -12,7 +12,8 @@ variantInfoFile=$2 # Tab-separated file with position info for SuSiE lead eQTLs.
 inVCF=$3 # Same VCF file used for eQTL mapping
 expressionBed=$4 # TSS BED with DESeq2-normalized logged pseudocounts
 covFile=$5 # Covariate file (same one used for FastQTL and SuSiE)
-outFile=$6 # File to write aFCn results to
+out_eQTLs=$6 # File of eQTLs, used as input for aFC-n, and the interaction test
+out_aFCnFile=$7 # File to write aFCn results to
 
 threads=8
 
@@ -34,22 +35,20 @@ correctCovariatesScript=$scriptDir/correct_covariates.ci95_wGT.py
 # Format eQTL input #
 #===================#
 
-tmpPrefix=$(mktemp)
-tmp_eQTLInput=$tmpPrefix.eQTLs.txt
-
-$getQTLsScript $leadHitSummaryFile $variantInfoFile $tmp_eQTLInput
+$getQTLsScript $leadHitSummaryFile $variantInfoFile $out_eQTLs
 
 
 #=================================================#
 # Regress covariates out from logged pseudocounts #
 #=================================================#
 
+tmpPrefix=$(mktemp)
 tmp_correctedExpression=$tmpPrefix.expression.covariate-corrected.ci95_wGT.bed
 
 $correctCovariatesScript \
 --vcf $inVCF \
 --pheno $expressionBed \
---qtl $tmp_eQTLInput \
+--qtl $out_eQTLs \
 --cov $covFile \
 --out $tmp_correctedExpression
 
@@ -72,9 +71,9 @@ zcat $tmp_correctedExpression | cut -f 4- | awk -v FS="\t" -v OFS="," 'NR==1 {$1
 
 afcn.py --vcf $inVCF \
 		--expr $tmpExpressionFile \
-		--eqtl $tmp_eQTLInput \
+		--eqtl $out_eQTLs \
 		--conf \
-		--output $outFile \
+		--output $out_aFCnFile \
 		--nthreads $threads
 
 
