@@ -7,7 +7,7 @@
 pcaEigenvec=$1 # output .eigenvec file from plink
 peerX=$2 # X.csv file from PEER
 addCovFile=$3 # File with additional covariates to include (e.g. sex)
-outFile=$4 # File to write formatted covariates file to
+outPrefix=$4 # File to write formatted covariates file to
 
 numPCs=5
 
@@ -47,7 +47,7 @@ cat $pcaEigenvec | cut -d' ' -f -$numCols > $tmpPCs
 $collectionScript --eigenvecs $tmpPCs \
 				  --peerX $peerX \
 				  --addCov $addCovFile \
-				  --out $outFile
+				  --out $outPrefix.tab.gz
 
 
 #==========#
