@@ -14,7 +14,7 @@ The `01_run_fastqtl_nominal.sh` script will run [FastQTL](https://github.com/fra
 The script takes five arguments:
 1. `inVCF`: The VCF file with variants to run eQTL mapping on. This can be any of the `.MAGE.v0.1.vcf.gz` files created in the [`subset_VCFs`](../../data_preparation/subset_VCFs/) step. For the initial MAGE publication, we ran each chromosome separately. You can run all chromosomes together, but you will need to change the `chunks` argument when running FastQTL
 2. `invNormTMMBed`: A BED file containing inverse normal transformed TMM values. This is the `<prefix>.filtered.inverse-normal-tmm.bed.gz` file created in the [`expression_quantification`](../../data_preparation/expression_quantification/) step. For the initial MAGE publication, we ran each chromosome separately, subsetting this bed file to a single chromosome, which we then used as input here. 
-3. `covFile`: This is the `.tab.gz` file created in the [`get_eQTL_covariates`](../get_eQTL_covariates/) step. This file *MUST* must have the suffix `.tab.gz`, otherwise FastQTL may not run properly.
+3. `covFile`: This is the `.tab.gz` file created in the [`get_eQTL_covariates`](../get_eQTL_covariates/) step.
 4. `outDir`: Directory to write output nominal results files to
 5. `outPrefix`: Prefix of output nominal results files
 
