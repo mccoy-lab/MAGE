@@ -9,7 +9,7 @@ outCSSummary=$2 # sQTL_finemapping.introns.credibleSet_summary.MAGE.v0.1.txt
 outFullSNPSummary=$3 # sQTL_finemapping.introns.allAssociations.MAGE.v0.1.txt
 outSigSNPSummary=$4 # sQTL_finemapping.introns.significantAssociations.MAGE.v0.1.txt
 outGeneSigSNPSummary=$5 # sQTL_finemapping.geneMerged.significantAssociations.MAGE.v0.1.txt
-outGeneLeadHitSummary=$5 # sQTL_finemapping.geneMerged.leadVariant.MAGE.v0.1.txt
+outGeneLeadHitSummary=$6 # sQTL_finemapping.geneMerged.leadVariant.MAGE.v0.1.txt
 
 
 #=============#
