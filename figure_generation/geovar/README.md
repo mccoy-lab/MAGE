@@ -1,9 +1,10 @@
 ## GeoVar Figure Generation
 
-The scripts in this directory generate the following figures in the main manuscript:
+The scripts in this directory generate the following figures in the main MAGE manuscript:
 
-* 
-
+* Figure 5A
+* Figure S17
+* Figure S18
 
 ### Running Figure Generation
 
