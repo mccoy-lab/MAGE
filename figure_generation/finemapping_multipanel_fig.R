@@ -143,8 +143,8 @@ dt$group <- factor(dt$group, levels = c("Single causal variant model", "Multiple
 my_palette <- c('#ccebc5','#a8ddb5','#7bccc4','#43a2ca','#0868ac')
 
 panel_interaction <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6], 
-       aes(x = pval, y = finemapped / n_total_finemap, 
-           color = factor(numCredibleSets, levels = 5:1))) +
+                            aes(x = pval, y = finemapped / n_total_finemap, 
+                                color = factor(numCredibleSets, levels = 5:1))) +
   theme_bw() +
   geom_line() +
   geom_vline(xintercept = 6.043026e-06, lty = "dashed") +
@@ -158,8 +158,8 @@ panel_interaction <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6],
 
 panel_interaction_left <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6 & 
                                              group == "Single causal variant model"], 
-                            aes(x = pval, y = finemapped / n_total_finemap, 
-                                color = factor(numCredibleSets, levels = 5:1))) +
+                                 aes(x = pval, y = finemapped / n_total_finemap, 
+                                     color = factor(numCredibleSets, levels = 5:1))) +
   theme_bw() +
   geom_line() +
   geom_vline(xintercept = 6.043026e-06, lty = "dashed", color = "darkgray") +
@@ -172,9 +172,9 @@ panel_interaction_left <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-
   scale_color_manual(values = my_palette, name = "Number of\ncredible sets")
 
 panel_interaction_right <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6 & 
-                                             group == "Multiple causal variants model"], 
-                                 aes(x = pval, y = finemapped / n_total_finemap, 
-                                     color = factor(numCredibleSets, levels = 5:1))) +
+                                              group == "Multiple causal variants model"], 
+                                  aes(x = pval, y = finemapped / n_total_finemap, 
+                                      color = factor(numCredibleSets, levels = 5:1))) +
   theme_bw() +
   geom_line() +
   geom_vline(xintercept = 6.043026e-06, lty = "dashed", color = "darkgray") +
@@ -257,9 +257,32 @@ panel_eqtl_beta_by_pli <- ggplot(data = eqtl_effects,
   theme(legend.position = "none") +
   ylab("Density")  +
   xlab(bquote('Absolute eQTL effect size (|' ~log[2]~(aFC)~'|)')) +
-   # xlab(expression("Absolute eQTL effect size (|" ~ log_2_(aFC) ~ "|)")) +
+  # xlab(expression("Absolute eQTL effect size (|" ~ log_2_(aFC) ~ "|)")) +
   annotate(y = 1.5, x = 4, label = paste("p =", formatC(pli_eqtl_p, format = "e", digits = 2)), 
            color = "black", size = 4, geom = "text")
+
+# test whether this holds for expression-increasing versus expression-decreasing alleles
+
+ggplot(data = eqtl_effects, 
+       aes(x = log2_aFC, fill = pLI, color = pLI)) +
+  geom_density(alpha = 0.5) +
+  theme_bw() +
+  scale_fill_manual(values = rev(c("#CD7EAE","#668A99")), name = "") +
+  scale_color_manual(values = rev(c("#CD7EAE","#668A99")), name = "") +
+  theme(legend.position = "none") +
+  ylab("Density")  +
+  xlab(bquote('Absolute eQTL effect size (|' ~log[2]~(aFC)~'|)')) +
+  # xlab(expression("Absolute eQTL effect size (|" ~ log_2_(aFC) ~ "|)")) +
+  annotate(y = 1.5, x = 4, label = paste("p =", formatC(pli_eqtl_p, format = "e", digits = 2)), 
+           color = "black", size = 4, geom = "text")
+
+mean(abs(eqtl_effects[log2_aFC >0 & pLI == TRUE]$log2_aFC)) - mean(abs(eqtl_effects[log2_aFC >0 & pLI == FALSE]$log2_aFC))
+wilcox.test(abs(eqtl_effects[log2_aFC >0 & pLI == TRUE]$log2_aFC), 
+            abs(eqtl_effects[log2_aFC >0 & pLI == FALSE]$log2_aFC))$p.value
+
+mean(abs(eqtl_effects[log2_aFC < 0 & pLI == TRUE]$log2_aFC)) - mean(abs(eqtl_effects[log2_aFC < 0 & pLI == FALSE]$log2_aFC))
+wilcox.test(abs(eqtl_effects[log2_aFC < 0 & pLI == TRUE]$log2_aFC), 
+            abs(eqtl_effects[log2_aFC < 0 & pLI == FALSE]$log2_aFC))$p.value
 
 ### plot multipanel ###
 
