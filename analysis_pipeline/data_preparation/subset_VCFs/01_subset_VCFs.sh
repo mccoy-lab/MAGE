@@ -28,7 +28,7 @@ for i in {1..22}; do
 	outVCF=$out_vcfDir/$chrom.MAGE.v0.1.vcf.gz
 
 	bcftools view -S $sampleListFile --min-ac=1 -O z -o $outVCF $inVCF
-	tabix -p vcf $outFile
+	tabix -p vcf $outVCF
 done
 
 
