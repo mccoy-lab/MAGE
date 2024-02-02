@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="MAGE_logo.large_no_bg_white_letters_w_outline.png">
-  <source media="(prefers-color-scheme: light)" srcset="MAGE_logo.large_no_bg_black_letters_w_outline.png">
-  <img alt="MAGE logo" src="MAGE_logo.large_no_bg_black_letters_w_outline.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mccoy-lab/MAGE/main/images/MAGE_logo.large_no_bg_white_letters_w_outline.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/mccoy-lab/MAGE/main/images/MAGE_logo.large_no_bg_black_letters_w_outline.png">
+  <img alt="MAGE logo" src="https://raw.githubusercontent.com/mccoy-lab/MAGE/main/images/MAGE_logo.large_white_bg_black_letters.png">
 </picture>
 
 
