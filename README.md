@@ -1,4 +1,4 @@
-![MAGE sampled populations](/images/MAGE_population_map.png)
+![MAGE sampled populations](/images/MAGE_logo.large_no_bg_white_letters.png)
 
 # MAGE: Multi-ancestry Analysis of Gene Expression
 
