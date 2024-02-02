@@ -4,8 +4,7 @@
   <img alt="MAGE logo" src="https://raw.githubusercontent.com/mccoy-lab/MAGE/main/images/MAGE_logo.large_white_bg_black_letters.png">
 </picture>
 
-
-<br><br>
+# MAGE: Multi-ancestry Analysis of Gene Expression
 
 [![DOI](https://zenodo.org/badge/451943672.svg)](https://zenodo.org/doi/10.5281/zenodo.10072080)
 
