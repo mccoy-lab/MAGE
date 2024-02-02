@@ -1,6 +1,6 @@
 ![MAGE logo](/images/MAGE_logo.large_dark_bg_white_letters_w_outline.png)
 
-# MAGE: Multi-ancestry Analysis of Gene Expression
+<br><br>
 
 [![DOI](https://zenodo.org/badge/451943672.svg)](https://zenodo.org/doi/10.5281/zenodo.10072080)
 
