@@ -1,9 +1,7 @@
-![MAGE logo](/images/MAGE_logo.large_dark_bg_white_letters_w_outline.png)
-
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/25423296/163456776-7f95b81a-f1ed-45f7-b7ab-8fa810d529fa.png">
-  <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/25423296/163456779-a8556205-d0a5-45e2-ac17-42d089e3c3f8.png">
-  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="https://user-images.githubusercontent.com/25423296/163456779-a8556205-d0a5-45e2-ac17-42d089e3c3f8.png">
+  <source media="(prefers-color-scheme: dark)" srcset="MAGE_logo.large_no_bg_white_letters_w_outline.png">
+  <source media="(prefers-color-scheme: light)" srcset="MAGE_logo.large_no_bg_black_letters_w_outline.png">
+  <img alt="MAGE logo" src="MAGE_logo.large_no_bg_black_letters_w_outline.png">
 </picture>
 
 
