@@ -7,7 +7,7 @@
 inVCF=$1 # chrX VCF from 1KGP
 sampleListFile=$2 # Text file with selected samples
 out_chrX_VCFgz=$3 # Output chrX VCF (no genotype conversion), should end in .gz
-out_chrx__hap2dip_VCFgz=$3 # Output chrX VCF with haploid genotypes converted to diploid genotypes, should end in .gz
+out_chrX_hap2dip_VCFgz=$4 # Output chrX VCF with haploid genotypes converted to diploid genotypes, should end in .gz
 
 
 #=============#
@@ -56,5 +56,5 @@ tmpVCF3=$(mktemp --suffix=".vcf")
 $hap2dipScript $out_chrX_VCFgz > $tmpVCF3
 
 bgzip $tmpVCF3
-mv $tmpVCF3.gz $out_chrx__hap2dip_VCFgz
-tabix -p vcf $out_chrx__hap2dip_VCFgz
+mv $tmpVCF3.gz $out_chrX_hap2dip_VCFgz
+tabix -p vcf $out_chrX_hap2dip_VCFgz
