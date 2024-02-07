@@ -29,7 +29,7 @@ hap2dipScript=$scriptDir/haploid2diploid.py
 
 tmpVCF=$(mktemp --suffix=".vcf.gz")
 
-bcftools view -S $sampleListFile --min-ac=1 -O z -o $tmpVCF $inVCF
+bcftools view -S $sampleListFile --min-ac=1 -O z -o $tmpVCF $inVCF chrX
 
 
 #=================#
