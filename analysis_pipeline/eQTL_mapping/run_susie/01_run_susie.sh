@@ -36,7 +36,7 @@ tmpGeneBed=$tmpPrefix.gene.bed
 tmpVariantsPrefix=$tmpPrefix.variants
 
 zgrep -m1 $geneID $invNormTMMBed | awk -v window=$window 'BEGIN{OFS="\t";} {print $1, ($2-window>0)?$2-window:0, $3+window}' > $tmpGeneBed
-bcftools view -R $tmpGeneBed --min-af ${mafThreshold}:minor $inVCF > $tmpVariantsPrefix.vcf
+bcftools view --regions-overlap pos -R $tmpGeneBed --min-af ${mafThreshold}:minor $inVCF > $tmpVariantsPrefix.vcf
 vcftools --gzvcf $tmpVariantsPrefix.vcf --012 --out $tmpVariantsPrefix 2> /dev/null
 grep ^[^#] $tmpVariantsPrefix.vcf | cut -f 3 > $tmpVariantsPrefix.012.snps
 
