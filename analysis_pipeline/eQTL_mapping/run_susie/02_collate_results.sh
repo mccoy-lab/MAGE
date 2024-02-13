@@ -68,4 +68,4 @@ fi
 # Get best hits (highest PIP) for each credible set #
 #===================================================#
 
-$leadHitScript $outSigSNPSummary $outBestHitSummary
+$leadHitScript $outSigSNPSummary $outLeadHitSummary
