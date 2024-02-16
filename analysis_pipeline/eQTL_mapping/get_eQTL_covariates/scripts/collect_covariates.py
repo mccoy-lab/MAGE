@@ -12,7 +12,7 @@ def main():
 
 	parser = argparse.ArgumentParser(description="Collect and format covariates for use with FastQTL")
 	parser.add_argument('-e', '--eigenvecs', required=True, help='Genotype PC ".eigenvec" file from Plink')
-	parser.add_argument('-p', '--peerX', required=True, help='Output "X.csv" file from PEER')
+	parser.add_argument('-p', '--peerX', required=False, help='Output "X.csv" file from PEER')
 	parser.add_argument('-a', '--addCov', required=False, help="Tab-separated file with additional covariates. Should have a header row. First column should be sample IDs, additional columns are additional covariates to include.")
 	parser.add_argument('-o', '--out', required=True, help="Name of file to write collected formatted covariates to.")
 
@@ -27,19 +27,21 @@ def main():
 	fullDF.set_index(keys='id', drop=True, inplace=True)
 
 	# Add PEER covariates
-	peerArray = np.loadtxt(args.peerX, delimiter=',', dtype=float).T
-	peer_labels = [f'PEER{i+1}' for i in range(peerArray.shape[0])]
+	if args.peerX:
+		peerArray = np.loadtxt(args.peerX, delimiter=',', dtype=float, ndmin=2).T
+		peer_labels = [f'PEER{i+1}' for i in range(peerArray.shape[0])]
 
-	for i, label in enumerate(peer_labels):
-		fullDF.loc[label, :] = peerArray[i, :]
+		for i, label in enumerate(peer_labels):
+			fullDF.loc[label, :] = peerArray[i, :]
 
 	# Add additional covariates
-	addCovDF = pd.read_csv(args.addCov, header=0, sep='\t').T
-	addCovDF.columns = addCovDF.iloc[0]
-	addCovDF.drop(addCovDF.index[0], inplace=True)
-	addCovDF.columns.name = None
-	addCovDF.index.name = 'id'
-	fullDF = pd.concat([fullDF, addCovDF], axis=0)
+	if args.addCov:
+		addCovDF = pd.read_csv(args.addCov, header=0, sep='\t').T
+		addCovDF.columns = addCovDF.iloc[0]
+		addCovDF.drop(addCovDF.index[0], inplace=True)
+		addCovDF.columns.name = None
+		addCovDF.index.name = 'id'
+		fullDF = pd.concat([fullDF, addCovDF], axis=0)
 
 	# Output
 	fullDF.to_csv(args.out, sep='\t', header=True, index=True)
