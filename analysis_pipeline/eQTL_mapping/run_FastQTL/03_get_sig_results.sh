@@ -24,9 +24,9 @@ scriptDir=$thisDir/scripts
 getSigResultsScript=$scriptDir/get_sig_results.py
 
 
-#=============#
-# Run FastQTL #
-#=============#
+#=========================#
+# Get significant results #
+#=========================#
 
 gzip_check=False
 
