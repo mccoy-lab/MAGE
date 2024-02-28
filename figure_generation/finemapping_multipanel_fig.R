@@ -70,7 +70,7 @@ panel_var_per_cs_log <- ggplot(data = var_per_cs_dt, aes(x = x, y = y)) +
 
 causal_sets_per_gene <- fread("~/Downloads/eQTL_finemapping.genes.txt.gz")
 
-interaction <- fread("~/Downloads/susie_eQTLs.maf-threshold.superpop-interaction.txt.gz") %>%
+interaction <- fread("~/Downloads/fastQTL_eQTLs.maf-threshold.single-variant.superpop-interaction.txt.gz") %>%
   .[, gene_var := paste(geneID, variantID)] %>%
   .[, pval := F_pval]
 
@@ -142,27 +142,13 @@ dt$group <- factor(dt$group, levels = c("Single causal variant model", "Multiple
 
 my_palette <- c('#ccebc5','#a8ddb5','#7bccc4','#43a2ca','#0868ac')
 
-panel_interaction <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6], 
-                            aes(x = pval, y = finemapped / n_total_finemap, 
-                                color = factor(numCredibleSets, levels = 5:1))) +
-  theme_bw() +
-  geom_line() +
-  geom_vline(xintercept = 6.043026e-06, lty = "dashed") +
-  #scale_color_brewer(palette = "Set2", name = "") +
-  xlab("p-value threshold") +
-  ylab("Prop. significant interactions") +
-  scale_x_log10() +
-  facet_grid(. ~ group) +
-  theme(legend.position = c(0.7, 0.5)) +
-  scale_color_manual(values = my_palette, name = "Number of\ncredible sets")
-
-panel_interaction_left <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6 & 
+panel_interaction_left <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6 &
                                              group == "Single causal variant model"], 
                                  aes(x = pval, y = finemapped / n_total_finemap, 
                                      color = factor(numCredibleSets, levels = 5:1))) +
   theme_bw() +
   geom_line() +
-  geom_vline(xintercept = 6.043026e-06, lty = "dashed", color = "darkgray") +
+  geom_vline(xintercept = 5.969436e-06, lty = "dashed", color = "darkgray") +
   #scale_color_brewer(palette = "Set2", name = "") +
   xlab("p-value threshold") +
   ylab("Prop. significant interactions") +
@@ -171,13 +157,13 @@ panel_interaction_left <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-
   theme(legend.position = "none") +
   scale_color_manual(values = my_palette, name = "Number of\ncredible sets")
 
-panel_interaction_right <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6 & 
+panel_interaction_right <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6 &
                                               group == "Multiple causal variants model"], 
                                   aes(x = pval, y = finemapped / n_total_finemap, 
                                       color = factor(numCredibleSets, levels = 5:1))) +
   theme_bw() +
   geom_line() +
-  geom_vline(xintercept = 6.043026e-06, lty = "dashed", color = "darkgray") +
+  geom_vline(xintercept = 4.052521e-06, lty = "dashed", color = "darkgray") +
   #scale_color_brewer(palette = "Set2", name = "") +
   xlab("p-value threshold") +
   ylab("Prop. significant interactions") +
@@ -185,6 +171,8 @@ panel_interaction_right <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e
   facet_grid(. ~ group) +
   theme(legend.position = c(0.4, 0.57), legend.box.background = element_rect(colour = "darkgray")) +
   scale_color_manual(values = my_palette, name = "Number of credible sets")
+
+plot_grid(panel_interaction_left, panel_interaction_right)
 
 ### stratify number of causal sets on pLI ###
 
@@ -291,6 +279,5 @@ plot_grid(panel_cs_per_gene, panel_var_per_cs_log,
           panel_interaction_left, panel_interaction_right,
           nrow = 3, align = "vh", axis = "lrtb",
           labels = paste0(LETTERS[1:6], "."))
-
 
 
