@@ -185,9 +185,20 @@ disp <- fread("~/Downloads/dispersions.csv")[expression_threshold.autosome == TR
 
 disp <- merge(dt, disp[expression_threshold.autosome == TRUE, c("gene", "baseMean", "dispersion")])
 
-plof <- fread("bgzip -c -d https://storage.googleapis.com/gcp-public-data--gnomad/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz") %>%
+# restrict gnomad constraint data to MANE Select transcripts to avoid double-counting
+plof <- fread("https://storage.googleapis.com/gcp-public-data--gnomad/release/4.0/constraint/gnomad.v4.0.constraint_metrics.tsv") %>%
   setnames(., "gene", "gene_symbol") %>%
-  setnames(., "gene_id", "gene")
+  .[mane_select == TRUE]
+
+tx2gene <- rtracklayer::import("~/Downloads/gencode.v39.annotation.gtf.gz")
+tx2gene <- data.table(tx2gene$transcript_id, tx2gene$gene_id) %>%
+  setnames(., c("transcript", "gene")) %>%
+  .[, gene := gsub("\\..*", "", gene)] %>%
+  .[, transcript := gsub("\\..*", "", transcript)] %>%
+  .[!is.na(transcript) & !is.na(gene) & !duplicated(transcript)]
+
+plof <- merge(plof, tx2gene, by = "transcript")[, c("gene", "lof.pLI", "lof.oe_ci.upper")] %>%
+  setnames(., "lof.pLI", "pLI")
 
 disp <- merge(disp, plof, by = "gene", all.x = TRUE) %>%
   mutate(., pLI_decile = ntile(pLI, 10)) %>%
@@ -276,8 +287,9 @@ wilcox.test(abs(eqtl_effects[log2_aFC < 0 & pLI == TRUE]$log2_aFC),
 
 plot_grid(panel_cs_per_gene, panel_var_per_cs_log, 
           panel_cs_by_pli, panel_eqtl_beta_by_pli, 
-          panel_interaction_left, panel_interaction_right,
-          nrow = 3, align = "vh", axis = "lrtb",
+          nrow = 2, align = "vh", axis = "lrtb",
           labels = paste0(LETTERS[1:6], "."))
+
+
 
 
