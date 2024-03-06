@@ -77,17 +77,26 @@ interaction <- fread("~/Downloads/fastQTL_eQTLs.maf-threshold.single-variant.sup
 interaction <- merge(interaction, causal_sets_per_gene, by = "geneID")
 
 prop_by_threshold <- function(data, pval_threshold, n_causal_sets) {
-  data.table(pval = pval_threshold,
-             numCredibleSets = n_causal_sets,
-             finemapped = nrow(data[numCredibleSets == n_causal_sets & pval < pval_threshold]),
-             n_total_finemap = nrow(data[numCredibleSets == n_causal_sets])
-  ) %>%
-    return()
+  if (n_causal_sets < 5) {
+    data.table(pval = pval_threshold,
+               numCredibleSets = as.character(n_causal_sets),
+               finemapped = nrow(data[numCredibleSets == n_causal_sets & pval < pval_threshold]),
+               n_total_finemap = nrow(data[numCredibleSets == n_causal_sets])
+    ) %>%
+      return()
+  } else if (n_causal_sets == 5) {
+    data.table(pval = pval_threshold,
+               numCredibleSets = "≥5",
+               finemapped = nrow(data[numCredibleSets >= n_causal_sets & pval < pval_threshold]),
+               n_total_finemap = nrow(data[numCredibleSets >= n_causal_sets])
+    ) %>%
+      return()
+  }
 }
 
 dt_interaction <- rbindlist(
   
-  lapply(1:8,
+  lapply(1:5,
          function(y) { rbindlist(
            
            
@@ -109,18 +118,9 @@ interaction_multivar <- fread("~/Downloads/susie_eQTLs.maf-threshold.multivarian
 
 interaction_multivar <- merge(interaction_multivar, causal_sets_per_gene, by = "geneID")
 
-prop_by_threshold <- function(data, pval_threshold, n_causal_sets) {
-  data.table(pval = pval_threshold,
-             numCredibleSets = n_causal_sets,
-             finemapped = nrow(data[numCredibleSets == n_causal_sets & pval < pval_threshold]),
-             n_total_finemap = nrow(data[numCredibleSets == n_causal_sets])
-  ) %>%
-    return()
-}
-
 dt_interaction_multivar <- rbindlist(
   
-  lapply(1:8,
+  lapply(1:5,
          function(y) { rbindlist(
            
            
@@ -142,10 +142,10 @@ dt$group <- factor(dt$group, levels = c("Single causal variant model", "Multiple
 
 my_palette <- c('#ccebc5','#a8ddb5','#7bccc4','#43a2ca','#0868ac')
 
-panel_interaction_left <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6 &
+panel_interaction_left <- ggplot(data = dt[pval > 1e-6 &
                                              group == "Single causal variant model"], 
                                  aes(x = pval, y = finemapped / n_total_finemap, 
-                                     color = factor(numCredibleSets, levels = 5:1))) +
+                                     color = factor(numCredibleSets, levels = c("≥5", "4", "3", "2", "1")))) +
   theme_bw() +
   geom_line() +
   geom_vline(xintercept = 5.969436e-06, lty = "dashed", color = "darkgray") +
@@ -157,10 +157,10 @@ panel_interaction_left <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-
   theme(legend.position = "none") +
   scale_color_manual(values = my_palette, name = "Number of\ncredible sets")
 
-panel_interaction_right <- ggplot(data = dt[numCredibleSets %in% 1:5 & pval > 1e-6 &
+panel_interaction_right <- ggplot(data = dt[pval > 1e-6 &
                                               group == "Multiple causal variants model"], 
                                   aes(x = pval, y = finemapped / n_total_finemap, 
-                                      color = factor(numCredibleSets, levels = 5:1))) +
+                                      color = factor(numCredibleSets, levels = c("≥5", "4", "3", "2", "1")))) +
   theme_bw() +
   geom_line() +
   geom_vline(xintercept = 4.052521e-06, lty = "dashed", color = "darkgray") +
@@ -289,7 +289,6 @@ plot_grid(panel_cs_per_gene, panel_var_per_cs_log,
           panel_cs_by_pli, panel_eqtl_beta_by_pli, 
           nrow = 2, align = "vh", axis = "lrtb",
           labels = paste0(LETTERS[1:6], "."))
-
 
 
 
