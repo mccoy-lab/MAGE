@@ -2,8 +2,6 @@ library(tidyverse)
 library(data.table)
 library(pbmcapply)
 library(khroma)
-library(wesanderson)
-library(RColorBrewer)
 
 #======================#
 # Required input files #
@@ -195,7 +193,7 @@ cs_overlaps_plot$summary <- factor(cs_overlaps_plot$summary,
                                               "CS shares variants with\nexactly 1 CS in comparison group"))
 
 # Barplot of CS overlaps between continental group pairs
-ggplot(test, aes(x = conts, fill = summary)) +
+ggplot(cs_overlaps_plot, aes(x = conts, fill = summary)) +
   geom_bar() +
   scale_fill_manual(values = as.vector(color("light")(5))) +
   scale_x_discrete(labels = gsub("_", "\n", cont_perm)) +
