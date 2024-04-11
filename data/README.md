@@ -4,6 +4,8 @@ Publicly accessible data for MAGE (QTL results, expression/splicing quantificati
 
 <img src="/images/dropbox.png" width="15" style="float: bottom;"> **[MAGEv.01 Data](https://www.dropbox.com/scl/fo/x37i95777zm0l0db1ngh0/h?rlkey=lpl5n6e82gh7tctr588m9vort&dl=0)**
 
+[![DOI](https://zenodo.org/badge/451943672.svg)](https://zenodo.org/doi/10.5281/zenodo.10535719)
+
 A full description of the available processed gene expression data is in [Expression.md](/data/Expression.md)
 
 ## QTL results
