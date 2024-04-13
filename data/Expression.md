@@ -10,9 +10,10 @@
 	* [Gene expression (vst)](#gene-expression-vst)
 * [**Expression variation**](#expression-variation)
     * [Proportion of variance explained by population](#proportion-of-variance-explained-by-population)
+    * [Residual variance within population labels](#residual-variance-within-population-labels)
     * [Population permutation test](#population-permutation-test)
-    * [Proportion of variance explained by sequencing batch](#proportion-of-variance-explained-by-batch)
-* [**Relationship between fixation index and differential expression**](#Relationship-between-fixation-index-and-differential-expression)
+    * [Proportion of variance explained by sequencing batch](#proportion-of-variance-explained-by-sequencing-batch)
+* [**Relationship between fixation index and differential expression**](#relationship-between-fixation-index-and-differential-expression)
 
 <br><br>
 
@@ -79,6 +80,17 @@ A summary of these results are presented in `PVE_regressions.csv`. The columns i
 8. `stage2b.SSR_res`: Residual sum of squares ($v_2$) in stage-two regression
 9. `continentalGroupPVE`: Proportion of variation explained by *continentalGroup* fixed-effect ($`SSR_{continentalGroup}/SST`$)
 10. `populationPVE`: Proportion of variation explained by *continentalGroup* fixed-effect ($`SSR_{population}/SST`$)
+
+<br><br>
+
+## Residual variance within population labels
+
+For both the collection of continental groups and population labels, we performed ANOVAs on samples within each group (e.g., among all AFR samples) to estimate the proportion of variance explained after removing *batch* and *sex* effects (once again using the VST expression matrix). Proportion of residual variance was computed as SSR/SST. The following regression formula was used for each focal group:
+$$VST(expression) \sim sex + batch$$
+
+The residual variance calculations are presented in the following files:
+1. `contGroup_variance.csv` for residual variance estimates within each continental group
+2. `pop_variance.csv` for residual variance estimates within each population label
 
 <br><br>
 
