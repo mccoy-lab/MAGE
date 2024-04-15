@@ -13,7 +13,7 @@ MAGE comprises RNA-seq data from lymphoblastoid cell lines derived from 731 indi
 
 ## Data Access
 
-### Raw reads:
+### Raw reads
 Newly generated RNA sequencing data for the 731 individuals (779 total libraries) is available on the Sequence Read Archive (Accession: **[PRJNA851328](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA851328)**).
 
 ### Processed data
