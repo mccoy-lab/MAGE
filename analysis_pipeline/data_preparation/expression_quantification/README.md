@@ -1,9 +1,8 @@
 # MAGE Expression Quantification
 
-This directory contains code to replicate the expression quantification procedure done as part of the initial MAGE publication. This procedure is broadly split into three sections:
+This directory contains code to replicate the expression quantification procedure done as part of the initial MAGE publication. This procedure is broadly split into two sections:
 1. Initial transcript-level quantification with [Salmon](https://combine-lab.github.io/salmon/)
 2. Filtering and normalization for eQTL mapping analysis
-3. Filtering and normalization for Differential Expression analyses
 
 *Note: these steps should be run in order*<br><br>
 
