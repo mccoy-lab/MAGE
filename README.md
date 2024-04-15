@@ -17,7 +17,8 @@ MAGE comprises RNA-seq data from lymphoblastoid cell lines derived from 731 indi
 Newly generated RNA sequencing data for the 731 individuals (779 total libraries) is available on the Sequence Read Archive (Accession: **[PRJNA851328](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA851328)**).
 
 ### Processed data
-Processed gene expression matrices and QTL mapping results (as well as a host of other downstream data) are currently available on Zenodo: **[MAGEv1.0 Data](https://zenodo.org/doi/10.5281/zenodo.10535719)**
+Processed gene expression matrices and QTL mapping results (as well as a host of other downstream data) are currently available on Zenodo **[MAGEv1.0 Zenodo link](https://zenodo.org/doi/10.5281/zenodo.10535719)** as well as Dropbox: **[MAGEv1.0 Dropbox link](https://www.dropbox.com/s/yc2ux5v0zoq1sbt/MAGE.v1.0.data.zip?dl=0)**
+
 
 Briefly, this repo contains the following data:
 1. Sample metadata and sequencing metrics
