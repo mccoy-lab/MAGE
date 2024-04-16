@@ -14,8 +14,10 @@ Work-in-progress
 
 ## Splicing quantification with Leafcutter
 
-Work-in-progress
-<br><br>
+The `02_intron_usage.sh` script will use the `STAR` alignments generated in the previous section to estimate intron cluster usage per sample. Following, intron usage estimates are aggregated across all samples and consolidated into a single file. The focal outputs from this script are `*._perind_numers.counts.gz` and `*perind.counts.gz` which contain ***counts*** of intron cluster usage and ***ratios***, respectively.<br>
+
+The script takes a single argument that is the path to the STAR output directory containing BAM files and their respective indices.<br>
+*Before running this script, install `leafcutter` following the instructions [here](https://davidaknowles.github.io/leafcutter/articles/Installation.html).*<br><br>
 
 ## Filtering and normalization for sQTL analyses
 
