@@ -31,7 +31,7 @@ This script will produce four files:
 3. a `.coloc.GWAS_CS.txt` file describing all SuSiE credible sets from the GWAS, AS LONG AS there was at least one moderate colocalization
 4. a `.coloc.eQTL_CS.txt` file describing all SuSiE credible sets for each eGene with at least one moderate colocalization
 
-We reccomend parallelizing across sentinel variants if possible when running this script.<br><br>
+We recommend parallelizing across sentinel variants if possible when running this script.<br><br>
 
 ## Collating colocalization results
 
