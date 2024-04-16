@@ -41,4 +41,4 @@ This script is run for a single sentinel variant takes five arguments:
 
 This script will produce two files: a `.ld` file with the LD matrix, and a `.snps` file listing the corresponding SNPs in the LD matrix.
 
-We reccomend parallelizing across sentinel variants if possible when running this script.<br><br>
+We recommend parallelizing across sentinel variants if possible when running this script.<br><br>
