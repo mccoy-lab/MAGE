@@ -1,52 +1,65 @@
-# code to process data for PCA
-# to compare ancestry composition
-# of various datasets
+#!/usr/bin/bash
 
-cd /scratch16/rmccoy22/rmccoy22/kgpex_pca
+#==========#
+# Get args #
+#==========#
+
+kgpVCFdir=$1 # The directory containing 1000 Genomes VCF files (one per chromosome) from the New York Genome Center 8/5/2020 release 
+             # with names such as CCDG_14151_B01_GRM_WGS_2020-08-05_chr1.filtered.shapeit2-duohmm-phased.vcf.gz
+gtexVCF=$2 # The path to the GTEx VCF file
+afgrVCF=$3 # The path to the AFGR MKK VCF file
+outDir=$4
+
+mafThreshold=0.05 # MAF threshold to test for associations
+
+#=========================================================================#
+# Using 1000 Genomes data, compute LD in windows and remove rare variants #
+#=========================================================================#
+
+cd ${outDir}
 mkdir 1kgp
-
-# compute LD in windows and remove rare variants
 
 for i in {1..22}
 do
-  plink --vcf ~/data_rmccoy22/1KGP_VCF_3202/CCDG_14151_B01_GRM_WGS_2020-08-05_chr${i}.filtered.shapeit2-duohmm-phased.vcf.gz \
+  plink --vcf ${kgpVCFdir}/CCDG_14151_B01_GRM_WGS_2020-08-05_chr${i}.filtered.shapeit2-duohmm-phased.vcf.gz \
     --keep keep_sorted.txt \
     --make-bed \
     --snps-only \
     --keep-allele-order \
-    --maf 0.05 \
+    --maf ${mafThreshold} \
     --indep-pairwise 200 20 0.2 \
-    --out 1kgp/1kgp_chr${i}_maf5percent &
+    --out ${outDir}/1kgp/1kgp_chr${i}_maf &
 done
 
 wait
 
-# extract LD-independent SNPs
 for i in {1..22}
 do
-plink --bfile 1kgp/1kgp_chr${i}_maf5percent \
-  --extract 1kgp/1kgp_chr${i}_maf5percent.prune.in \
+plink --bfile 1kgp/1kgp_chr${i}_maf \
+  --extract 1kgp/1kgp_chr${i}_maf.prune.in \
   --make-bed \
-  --out 1kgp/1kgp_chr${i}_maf5percent_extractLDindep
+  --out 1kgp/1kgp_chr${i}_maf_extractLDindep
 done
 
 rm -f merge_bed_list.txt
 # merge chromosomes
 for i in {2..22}
 do
-echo 1kgp/1kgp_chr${i}_maf5percent_extractLDindep
+echo 1kgp/1kgp_chr${i}_maf_extractLDindep
 done >> merge_bed_list.txt
 
-plink --bfile 1kgp/1kgp_chr1_maf5percent_extractLDindep \
+plink --bfile 1kgp/1kgp_chr1_maf_extractLDindep \
 --make-bed \
 --merge-list merge_bed_list.txt \
---out 1kgp_autosomal_maf5percent_extractLDindep
+--out 1kgp_autosomal_maf_extractLDindep
 
-cut -f2 1kgp_autosomal_maf5percent_extractLDindep.bim > 1kgp_snp_list.txt
+cut -f2 1kgp_autosomal_maf_extractLDindep.bim > 1kgp_snp_list.txt
 
-# convert GTEx to PLINK file and extract overlapping SNPs
+#===============================================================#
+# Convert GTEx VCF to PLINK format and extract overlapping SNPs #
+#===============================================================#
 
-nohup plink --vcf phg001796.v1.GTEx_v9_WGS_953.genotype-calls-vcf.c1/GTEx_Analysis_2021-02-11_v9_WholeGenomeSeq_953Indiv.vcf.gz \
+plink --vcf ${gtexVCF} \
 --make-bed \
 --out GTEx
 
@@ -62,9 +75,11 @@ plink --bfile GTEx \
 
 cut -f2 GTEx_1kgp_olap.bim | sort > gtex_snp_list.txt
 
-# convert MKK AGFR data to PLINK file and extract overlapping SNPs
+#===============================================================#
+# Convert AFGR VCF to PLINK format and extract overlapping SNPs #
+#===============================================================#
 
-plink --vcf mkk/MKK.filtered.biallelicAndRare.autosomal.chr.id.vcf.gz \
+plink --vcf ${afgrVCF} \
 --make-bed \
 --out AFGR
 
@@ -80,11 +95,9 @@ plink --bfile AFGR \
 
 cut -f2 AFGR_1kgp_olap.bim | sort > afgr_snp_list.txt
 
-### extract overlapping SNPs
-
 join -1 1 -2 1 gtex_snp_list.txt afgr_snp_list.txt > snp_list.txt
 
-plink --bfile 1kgp_autosomal_maf5percent_extractLDindep \
+plink --bfile 1kgp_autosomal_maf_extractLDindep \
   --extract snp_list.txt \
   --make-bed \
   --out 1kgp_merge_ready
@@ -101,7 +114,9 @@ plink --bfile AFGR_1kgp_olap \
   --snps-only \
   --out afgr_merge_ready
 
-# combine data
+#============================#
+# Combine the three datasets #
+#============================#
 
 echo "gtex_merge_ready" > merge_bed_list.txt
 echo "afgr_merge_ready" >> merge_bed_list.txt
@@ -112,11 +127,14 @@ plink --bfile 1kgp_merge_ready \
   --biallelic-only \
   --out merged_datasets
 
-# run PCA and ADMIXTURE on the combined data
+#============================================#
+# Run PCA and ADMIXTURE on the combined data #
+#============================================#
+
 plink --bfile merged_datasets \
   --pca
 
 for i in 6 7 8 9 10
 do 
-nohup ./dist/admixture_linux-1.3.0/admixture merged_datasets.bed ${i} -j8 > admixture_log_${i}.txt &
+admixture ${i} -j8 > admixture_log_${i}.txt &
 done
