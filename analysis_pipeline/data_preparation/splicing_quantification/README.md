@@ -12,7 +12,7 @@ This directory contains code to replicate the splicing quantification procedure 
 The `01_align_dev.sh` script uses VCF files from 1000 Genomes samples to perform variant-aware alignment with STAR. The script assumes that `bcftools`, `htslib`, `vcftools`, and `STAR` are in the user's path. The script requires seven arguments:
 
 1. `workDir`: Working directory where outputs will be generated
-2. `metaData`: The path to the `updated_metadata.tsv` file, provided in this directory
+2. `metaData`: The path to the `updated_metadata.tsv` file, provided in the `scripts/` directory
 3. `sampleID`: The identifier of a sample to align, such as `GM18861` or `HG00148`; replicates are denoted based on batch and replicate number, such as `GM20815-13-1` and `GM20815-13-2`
 4. `threads`: The number of threads to use for computation (set to 24 for our analysis)
 5. `kgpVCFdir`: Directory containing per-chromosome 1000 Genomes VCF files with names such as `CCDG_14151_B01_GRM_WGS_2020-08-05_chr${i}.filtered.eagle2-phased.v2.vcf.gz`
