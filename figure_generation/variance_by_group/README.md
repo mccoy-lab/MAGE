@@ -1,5 +1,6 @@
 # Variance in expression and splicing phenotypes figure generation
 
-`pve.R` contains the plotting commands to generate the plots associated with Figure 2. 
+This directory contains plotting code for the following figures:
 
-`batch_pve.R` contains plotting commands to generate the plots associated with Figures S5B and S5D.
+- Figure 2 (`pve.R`)
+- Figures S5B and S5D (`batch_pve.R`)
