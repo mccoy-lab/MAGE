@@ -1,20 +1,32 @@
 #!/bin/bash
 
-module load bcftools
-module load htslib
-module load vcftools
-module load STAR
+#==========#
+# Get args #
+#==========#
 
-cd /scratch16/rmccoy22/1KGP_expression/star_alignments
+workDir=$1     # Working directory where outputs will be generated
+metaData=$2    # The path to the `updated_metadata.tsv` file, provided in this directory
+sampleID=$3    # The identifier of a sample to align, such as `GM18861` or `HG00148`
+               # replicates are denoted based on batch and replicate number, such as `GM20815-13-1` and `GM20815-13-2`
+threads=$4     # The number of threads to use for computation (set to 24 for our analysis)
+kgpVCFdir=$5   # Directory containing per-chromosome 1000 Genomes VCF files with names such as 
+               # `CCDG_14151_B01_GRM_WGS_2020-08-05_chr${i}.filtered.eagle2-phased.v2.vcf.gz`
+starIndex=$6   # Path to the STAR index directory (generated from `GCA_000001405.15_GRCh38_no_alt_analysis_set.fna`)
+fastqDir=$7    # Path to directory containing FASTQ files, organized into subdirectories based on sequencing batch
 
-threads=24
-our_id=`sed "${SLURM_ARRAY_TASK_ID}q;d" sample_list.txt`
-coriell_id=`echo ${our_id} | cut -f1 -d '-'`
-participant_id=`cut -f1,3- /data/rmccoy22/1KGP_RNASEQ/updated_metadata.tsv | grep -P "${our_id}\t" | cut -f2`
-batch="batch"`cut -f1,3- /data/rmccoy22/1KGP_RNASEQ/updated_metadata.tsv | grep -P "${our_id}\t" | cut -f3`
-sex=`cut -f1,3- /data/rmccoy22/1KGP_RNASEQ/updated_metadata.tsv | grep -P "${our_id}\t" | cut -f7`
+#===================================#
+# Set variables by parsing metadata #
+#===================================#
 
-mkdir /scratch16/rmccoy22/1KGP_expression/star_alignments/output/${our_id}
+coriell_id=`echo ${sampleID} | cut -f1 -d '-'`
+participant_id=`cut -f1,3- ${metaData} | grep -P "${sampleID}\t" | cut -f2`
+batch="batch"`cut -f1,3- ${metaData} | grep -P "${sampleID}\t" | cut -f3`
+sex=`cut -f1,3- ${metaData} | grep -P "${sampleID}\t" | cut -f7`
+
+cd ${workDir}
+mkdir output
+mkdir output/${sampleID}
+mkdir vcf
 
 ## generate individual sample-specific VCF files with heterozygous variants
 j=1
@@ -22,19 +34,19 @@ if [ ${sex} = "female" ]
 then
     (i="X"
      echo "Processing chromosome ${i}."
-     vcf_file=/data/rmccoy22/1KGP_VCF_3202/CCDG_14151_B01_GRM_WGS_2020-08-05_chr${i}.filtered.eagle2-phased.v2.vcf.gz
-     bcftools view --threads ${threads} --no-update -s ${participant_id} -v snps ${vcf_file} | bcftools view --threads ${threads} --no-update -e 'GT=".|."' -Oz -o vcf/${our_id}.chr${i}.snps.vcf.gz
-     bcftools view --threads ${threads} --no-update -i 'GT="het"' vcf/${our_id}.chr${i}.snps.vcf.gz | bcftools norm -m+ | bcftools view --threads ${threads} -m2 -M2 -Oz -o vcf/${our_id}.chr${i}.snps.het.vcf.gz
-     tabix vcf/${our_id}.chr${i}.snps.het.vcf.gz) &
+     vcf_file=${kgpVCFdir}/CCDG_14151_B01_GRM_WGS_2020-08-05_chr${i}.filtered.eagle2-phased.v2.vcf.gz
+     bcftools view --threads ${threads} --no-update -s ${participant_id} -v snps ${vcf_file} | bcftools view --threads ${threads} --no-update -e 'GT=".|."' -Oz -o vcf/${sampleID}.chr${i}.snps.vcf.gz
+     bcftools view --threads ${threads} --no-update -i 'GT="het"' vcf/${sampleID}.chr${i}.snps.vcf.gz | bcftools norm -m+ | bcftools view --threads ${threads} -m2 -M2 -Oz -o vcf/${sampleID}.chr${i}.snps.het.vcf.gz
+     tabix vcf/${sampleID}.chr${i}.snps.het.vcf.gz) &
     pids[${j}]=$!
     j=$((j+1))
 fi
 for i in {1..22}; do
     (echo "Processing chromosome ${i}."
-     vcf_file=/data/rmccoy22/1KGP_VCF_3202/CCDG_14151_B01_GRM_WGS_2020-08-05_chr${i}.filtered.shapeit2-duohmm-phased.vcf.gz
-     bcftools view --threads 1 --no-update -s ${participant_id} -v snps ${vcf_file} | bcftools view --threads 1 --no-update -e 'GT=".|."' -Oz -o vcf/${our_id}.chr${i}.snps.vcf.gz
-     bcftools view --threads 1 --no-update -i 'GT="het"' vcf/${our_id}.chr${i}.snps.vcf.gz | bcftools norm -m+ | bcftools view --threads 1 -m2 -M2 -Oz -o vcf/${our_id}.chr${i}.snps.het.vcf.gz
-     tabix vcf/${our_id}.chr${i}.snps.het.vcf.gz) &
+     vcf_file=${kgpVCFdir}/CCDG_14151_B01_GRM_WGS_2020-08-05_chr${i}.filtered.shapeit2-duohmm-phased.vcf.gz
+     bcftools view --threads 1 --no-update -s ${participant_id} -v snps ${vcf_file} | bcftools view --threads 1 --no-update -e 'GT=".|."' -Oz -o vcf/${sampleID}.chr${i}.snps.vcf.gz
+     bcftools view --threads 1 --no-update -i 'GT="het"' vcf/${sampleID}.chr${i}.snps.vcf.gz | bcftools norm -m+ | bcftools view --threads 1 -m2 -M2 -Oz -o vcf/${sampleID}.chr${i}.snps.het.vcf.gz
+     tabix vcf/${sampleID}.chr${i}.snps.het.vcf.gz) &
     pids[${j}]=$!
     j=$((j+1))
 done
@@ -45,12 +57,12 @@ for pid in ${pids[*]}; do
 done
 
 # concatenate individual chromosome VCFs
-ls -d -1 "${PWD}"/vcf/${our_id}*.het.vcf.gz > vcf/${our_id}.vcf.list
-vcf-concat --files vcf/${our_id}.vcf.list > vcf/${our_id}.snps.het.vcf
+ls -d -1 "${PWD}"/vcf/${sampleID}*.het.vcf.gz > vcf/${sampleID}.vcf.list
+vcf-concat --files vcf/${sampleID}.vcf.list > vcf/${sampleID}.snps.het.vcf
 
 # clean up directory
-rm vcf/${our_id}.chr*.vcf*
-rm vcf/${our_id}.vcf.list
+rm vcf/${sampleID}.chr*.vcf*
+rm vcf/${sampleID}.vcf.list
 
 ## align RNA-seq data to reference with STAR
 # parameters inspired by https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md
@@ -58,14 +70,14 @@ STAR \
 --runMode alignReads \
 --runThreadN ${threads} \
 --twopassMode Basic \
---genomeDir /scratch16/rmccoy22/1KGP_expression/star_alignments/ref/star_index_oh149 \
---varVCFfile vcf/${our_id}.snps.het.vcf \
+--genomeDir ${starIndex} \
+--varVCFfile vcf/${sampleID}.snps.het.vcf \
 --waspOutputMode SAMtag \
---readFilesIn /data/rmccoy22/1KGP_RNASEQ/raw_reads/${batch}/${our_id}_R1_001.fastq.gz /data/rmccoy22/1KGP_RNASEQ/raw_reads/${batch}/${our_id}_R2_001.fastq.gz \
+--readFilesIn ${fastqDir}/${batch}/${sampleID}_R1_001.fastq.gz ${fastqDir}/${batch}/${sampleID}_R2_001.fastq.gz \
 --readFilesCommand zcat \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
---outFileNamePrefix /scratch16/rmccoy22/1KGP_expression/star_alignments/output/${our_id}/${our_id} \
+--outFileNamePrefix ${workDir}/${sampleID}/${sampleID} \
 --outFilterMultimapNmax 20 \
 --alignSJoverhangMin 8 \
 --alignSJDBoverhangMin 1 \
@@ -83,7 +95,7 @@ STAR \
 --outFilterIntronMotifs None \
 --alignSoftClipAtReferenceEnds Yes \
 --quantMode TranscriptomeSAM GeneCounts \
---outSAMattrRGline ID:${our_id} SM:${our_id} \
+--outSAMattrRGline ID:${sampleID} SM:${sampleID} \
 --outSAMattributes NH HI AS nM NM ch \
 --chimOutJunctionFormat 0 \
 --chimSegmentMin 15 \
@@ -91,5 +103,3 @@ STAR \
 --chimOutType Junctions WithinBAM SoftClip \
 --chimMainSegmentMultNmax 1 \
 --genomeLoad NoSharedMemory
-
-chgrp -R rmccoy22 /scratch16/rmccoy22/1KGP_expression/star_alignments/output/${our_id}
