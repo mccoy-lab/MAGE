@@ -287,11 +287,11 @@ top_panel_gene <- ggplot(data = constraint_dt[!grepl("PhyloP", metric)],
   xlab("Number of credible sets") +
   scale_fill_manual(values = c("#CD7EAE","#668A99"), name = "") +
   geom_text(data = pval_dt[!grepl("PhyloP", metric)], aes(x = 7, y = 0.35, 
-                                label = paste("p =", formatC(pval, format = "e", digits = 2))), 
+                                                          label = paste("p =", formatC(pval, format = "e", digits = 2))), 
             color = "black", size = 3)
 
 top_panel_promoter <- ggplot(data = constraint_dt[grepl("PhyloP", metric)], 
-                         aes(x = numCredibleSets, y = density, fill = y_facet)) +
+                             aes(x = numCredibleSets, y = density, fill = y_facet)) +
   geom_bar(stat = "identity", position = "dodge") +
   xlim(-1, 11) +
   theme_bw() +
@@ -301,7 +301,7 @@ top_panel_promoter <- ggplot(data = constraint_dt[grepl("PhyloP", metric)],
   xlab("Number of credible sets") +
   scale_fill_manual(values = c("#CD7EAE","#668A99"), name = "") +
   geom_text(data = pval_dt[grepl("PhyloP", metric)], aes(x = 7, y = 0.35, 
-                                label = paste("p =", formatC(pval, format = "e", digits = 2))), 
+                                                         label = paste("p =", formatC(pval, format = "e", digits = 2))), 
             color = "black", size = 3)
 
 #### contrast eQTL effect sizes between constrained and non-constrained sets
@@ -357,11 +357,11 @@ lower_panel_gene <- ggplot(data = eqtl_effects_melted[!grepl("PhyloP", variable)
   ylab("Density")  +
   xlab(bquote('Absolute eQTL effect size (|' ~log[2]~(aFC)~'|)')) +
   geom_text(data = pval_eqtl_dt[!grepl("PhyloP", variable)], aes(x = 4, y = 2.8, 
-                                     label = paste("p =", formatC(pval, format = "e", digits = 2))), 
+                                                                 label = paste("p =", formatC(pval, format = "e", digits = 2))), 
             color = "black", size = 3)
 
 lower_panel_promoter <- ggplot(data = eqtl_effects_melted[grepl("PhyloP", variable)], 
-                           aes(x = abs(log2_aFC), fill = is_constrained)) +
+                               aes(x = abs(log2_aFC), fill = is_constrained)) +
   geom_density(alpha = 0.5) +
   theme_bw() +
   facet_grid(. ~ variable, scales = "free", space = "free") + 
@@ -371,7 +371,7 @@ lower_panel_promoter <- ggplot(data = eqtl_effects_melted[grepl("PhyloP", variab
   ylab("Density")  +
   xlab(bquote('Absolute eQTL effect size (|' ~log[2]~(aFC)~'|)')) +
   geom_text(data = pval_eqtl_dt[grepl("PhyloP", variable)], aes(x = 4, y = 2.8, 
-                                     label = paste("p =", formatC(pval, format = "e", digits = 2))), 
+                                                                label = paste("p =", formatC(pval, format = "e", digits = 2))), 
             color = "black", size = 3)
 
 ### multipanel grid ###
