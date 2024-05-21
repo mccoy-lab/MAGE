@@ -35,7 +35,7 @@ afgr_list <- read_xlsx("~/Downloads/AFGR Supplementary Tables.xlsx", sheet = 1, 
 afgr_list2 <- fread("~/Downloads/AFGR.fam", header = FALSE) %>%
   setnames(., "V1", "sid")
 
-gtex_list <- fread("https://storage.googleapis.com/gtex_analysis_v8/annotations/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt") %>%
+gtex_list <- fread("https://storage.googleapis.com/adult-gtex/annotations/v8/metadata-files/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt") %>%
   .[SMAFRZE == "WGS"] %>%
   .[, sid := sub('^([^-]+-[^-]+).*', '\\1', SAMPID)]
 
@@ -87,13 +87,13 @@ dt$superpop <- factor(dt$superpop, levels = c("AFR", "AMR", "EAS", "EUR", "SAS",
 
 left_panel <- ggplot() +
   theme_bw() +
-  geom_point(data = dt[dataset != "KGPEx"], aes(x = V3, y = V4), color = 'gray95', size = 1) +
-  geom_point(data = dt[dataset == "KGPEx"], aes(x = V3, y = V4), color = '#e78ac3', size = 1) +
+  geom_point(data = dt[dataset != "KGPEx"], aes(x = V3, y = V4), color = 'gray95', size = 0.5) +
+  geom_point(data = dt[dataset == "KGPEx"], aes(x = V3, y = V4), color = '#e78ac3', size = 0.5) +
   theme(panel.grid = element_blank(), legend.position = "none") +
   annotate(geom = "text", x = 0.015, y = 0.03, size = 4, label = "KGPEx", color = "black") +
   xlab("PC1") + ylab("PC2")
 
-top_right_panel <- ggplot() +
+left_mid_panel <- ggplot() +
   theme_bw() +
   geom_point(data = dt[dataset != "Geuvadis"], aes(x = V3, y = V4), color = 'gray95', size = 0.5) +
   geom_point(data = dt[dataset == "Geuvadis"], aes(x = V3, y = V4), color = '#66c2a5', size = 0.5) +
@@ -101,7 +101,7 @@ top_right_panel <- ggplot() +
   annotate(geom = "text", x = 0.015, y = 0.03, size = 4, label = "Geuvadis", color = "black") +
   xlab("PC1") + ylab("PC2")
 
-middle_right_panel <- ggplot() +
+right_mid_panel <- ggplot() +
   theme_bw() +
   geom_point(data = dt[dataset != "GTEx"], aes(x = V3, y = V4), color = 'gray95', size = 0.5) +
   geom_point(data = dt[dataset == "GTEx"], aes(x = V3, y = V4), color = '#8da0cb', size = 0.5) +
@@ -109,7 +109,7 @@ middle_right_panel <- ggplot() +
   annotate(geom = "text", x = 0.015, y = 0.03, size = 4, label = "GTEx", color = "black") +
   xlab("PC1") + ylab("PC2")
 
-bottom_right_panel <- ggplot() +
+right_panel <- ggplot() +
   theme_bw() +
   geom_point(data = dt[dataset != "AFGR"], aes(x = V3, y = V4), color = 'gray95', size = 0.5) +
   geom_point(data = dt[dataset == "AFGR"], aes(x = V3, y = V4), color = '#fc8d62', size = 0.5) +
@@ -117,9 +117,25 @@ bottom_right_panel <- ggplot() +
   annotate(geom = "text", x = 0.015, y = 0.03, size = 4, label = "AFGR", color = "black") +
   xlab("PC1") + ylab("PC2")
 
-right_panel <- plot_grid(top_right_panel, middle_right_panel, bottom_right_panel, nrow = 3)
+pve <- fread("~/Downloads/pve.pca.eigenval") %>%
+  .[, PC := 1:20] %>%
+  .[, pve := (V1 / 2635.32) * 100]
 
-plot_grid(left_panel, right_panel, rel_widths = c(1, 0.35))
+#pve$PC <- factor(pve$PC, levels = paste0("PC", 1:20))
+
+pve_panel <- ggplot(data = pve[PC < 11], aes(x = factor(PC), y = pve)) +
+  geom_bar(stat = "identity") +
+  xlab("Principal component") +
+  ylab("Variance explained (%)") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+
+#right_panel <- plot_grid(top_right_panel, middle_right_panel, bottom_right_panel, nrow = 3)
+
+plot_grid(left_panel, left_mid_panel, right_mid_panel, right_panel, pve_panel, nrow = 1,
+          rel_widths = c(1, 1, 1, 1, 0.9))
+
+
 
 ###
 
@@ -175,22 +191,22 @@ qmat_ordered <- rbind(
   qmat[max_col == 1] %>% setorder(., V1),
   qmat[max_col == 2] %>% setorder(., V2),
   qmat[max_col == 3] %>% setorder(., V3),
+  qmat[max_col == 6] %>% setorder(., V6),
   qmat[max_col == 4] %>% setorder(., V4),
   qmat[max_col == 5] %>% setorder(., V5),
-  qmat[max_col == 6] %>% setorder(., V6),
   qmat[max_col == 7] %>% setorder(., V7)
 )
 
 sid_ordered <- qmat_ordered$sid
 
 my_palette <- c(
-  "#77AADD", 
-  "#BBCC33", 
-  "#FFAABB",
-  "#44BB99", 
-  "#EEDD88", 
-  "#99DDFF", 
-  "#EE8866"
+  "#77AADD", #V1
+  "#BBCC33", #V2
+  "#FFAABB", #V3
+  "#44BB99", #V4
+  "#EEDD88", #V5
+  "#99DDFF", #V6
+  "#EE8866"  #V7
 )
 
 qmat_melted <- melt(qmat[, 1:8], id.vars = "sid") %>%
@@ -210,6 +226,7 @@ panel_kgpex <- ggplot(data = qmat_melted[sid %in% kgpex_list$sid], aes(x = sid, 
   theme(axis.text.x = element_blank(), 
         panel.grid = element_blank(), 
         axis.ticks.x = element_blank(), 
+        axis.text.y = element_blank(),
         legend.position = "none",
         plot.title = element_text(hjust = 1),
         panel.spacing = unit(0, "lines")) +
@@ -224,6 +241,7 @@ panel_gtex <- ggplot(data = qmat_melted[sid %in% gtex_list$sid], aes(x = sid, y 
   theme(axis.text.x = element_blank(), 
         panel.grid = element_blank(), 
         axis.ticks.x = element_blank(), 
+        axis.text.y = element_blank(),
         legend.position = "none",
         plot.title = element_text(hjust = 1),
         panel.spacing = unit(0, "lines")) +
@@ -236,7 +254,8 @@ panel_geuvadis <- ggplot(data = qmat_melted[sid %in% geuvadis_list$sid], aes(x =
   theme_bw() +
   theme(axis.text.x = element_blank(), 
         panel.grid = element_blank(), 
-        axis.ticks.x = element_blank(), 
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_blank(),
         legend.position = "none",
         plot.title = element_text(hjust = 1),
         panel.spacing = unit(0, "lines")) +
@@ -251,7 +270,8 @@ panel_afgr <- ggplot(data = qmat_melted[sid %in% unique(c(afgr_list$sid, afgr_li
   theme_bw() +
   theme(axis.text.x = element_blank(), 
         panel.grid = element_blank(), 
-        axis.ticks.x = element_blank(), 
+        axis.ticks.x = element_blank(),
+        axis.text.y = element_blank(),
         legend.position = "none",
         plot.title = element_text(hjust = 1),
         panel.spacing = unit(0, "lines")) +
@@ -263,4 +283,6 @@ panel_afgr <- ggplot(data = qmat_melted[sid %in% unique(c(afgr_list$sid, afgr_li
 plot_grid(panel_kgpex, NULL, panel_gtex, NULL, panel_geuvadis, NULL, panel_afgr,
           nrow = 7,
           rel_heights = c(1, -0.1, 0.8, -0.1, 1, -0.1, 1))
+
+
 
