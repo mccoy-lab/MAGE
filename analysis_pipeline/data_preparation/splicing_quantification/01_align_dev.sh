@@ -5,7 +5,7 @@
 #==========#
 
 workDir=$1     # Working directory where outputs will be generated
-metaData=$2    # The path to the `updated_metadata.tsv` file, provided in this directory
+metaData=$2    # The path to the `updated_metadata.tsv` file, provided in the `scripts/` directory
 sampleID=$3    # The identifier of a sample to align, such as `GM18861` or `HG00148`
                # replicates are denoted based on batch and replicate number, such as `GM20815-13-1` and `GM20815-13-2`
 threads=$4     # The number of threads to use for computation (set to 24 for our analysis)
