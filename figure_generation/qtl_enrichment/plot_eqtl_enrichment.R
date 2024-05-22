@@ -1012,8 +1012,6 @@ local_dir="gregor/fulluniq_mageqtl"
 plot_pvalue_fullheatmap(local_dir, infile, annotation_file, output_fileprefix)
 
 
-
-
 #############################################################
 #                                                           #
 # Identify regulatory region the SNPs are located at        #
@@ -1026,7 +1024,7 @@ library(GenomicRanges)
 library(BiocFileCache)
 
 bfc <- BiocFileCache(ask=FALSE)
-Gm12878.hmm.file <- bfcrpath(bfc, "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz")
+Gm12878.hmm.file <- bfcrpath(bfc, "wgEncodeBroadHmmGm12878HMM.bed.gz")
 Gm12878.hmm <- toGRanges(Gm12878.hmm.file)
 Gm12878.hmm
 
@@ -1099,7 +1097,7 @@ library(BiocFileCache)
 bfc <- BiocFileCache(ask = FALSE)
 
 # Download the data
-Gm12878.hmm.file <- bfcrpath(bfc, "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz")
+Gm12878.hmm.file <- bfcrpath(bfc, "wgEncodeBroadHmmGm12878HMM.bed.gz")
 
 # Convert it to a GRanges object
 Gm12878.hmm <- toGRanges(Gm12878.hmm.file)
