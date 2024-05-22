@@ -37,6 +37,8 @@
 #' @importFrom gridExtra grid.arrange
 #' @export
 plot_foldenrich_fullheatmap <- function(local_dir, infile, annotation_file, output_fileprefix) {
+
+    # Load required libraries
     library(data.table)
     library(tidyverse)
     library(pheatmap)
