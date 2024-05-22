@@ -1026,7 +1026,7 @@ library(GenomicRanges)
 library(BiocFileCache)
 
 bfc <- BiocFileCache(ask=FALSE)
-Gm12878.hmm.file <- bfcrpath(bfc, "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeBroadHmm/wgEncodeBroadHmmGm12878HMM.bed.gz")
+Gm12878.hmm.file <- bfcrpath(bfc, "wgEncodeBroadHmmGm12878HMM.bed.gz")
 Gm12878.hmm <- toGRanges(Gm12878.hmm.file)
 Gm12878.hmm
 
