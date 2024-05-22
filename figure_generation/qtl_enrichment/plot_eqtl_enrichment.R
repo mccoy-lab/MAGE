@@ -6,20 +6,49 @@
 #                                                         #
 ########################################################### 
 
-# Ensure the packages and libraries below are installed
-library(data.table)
-library(tidyverse)
-library(pheatmap)
-library(RColorBrewer)
-library(ggrepel)
-library(pheatmap)
-library(tidyr)
-library(dplyr)
-library(ggplot2)
-library(ComplexHeatmap)
-library(circlize)
 
+#' Plot fold enrichment heatmap
+#'
+#' This function plots a heatmap of fold enrichment values from an input file.
+#' It computes the log2 fold enrichment (observed/expected) for each combination
+#' of cell type and chromatin state, and visualizes the results as a heatmap.
+#'
+#' @param local_dir The local directory where input and output files are located.
+#' @param infile The name of the input file containing fold enrichment data.
+#' @param annotation_file The name of the file containing cell type annotations.
+#' @param output_fileprefix The prefix for the output file name.
+#'
+#' @return A list containing the row and column order of the heatmap.
+#'
+#' @examples
+#' local_dir <- "path/to/directory"
+#' infile <- "StatisticSummaryFile_chromHMM_15state_tl_topsnps.txt"
+#' annotation_file <- "roadmap_annotation.txt"
+#' output_fileprefix <- "MAGE"
+#' heatmap_info <- plot_foldenrich_fullheatmap(local_dir, infile, annotation_file, output_fileprefix)
+#'
+#' @importFrom data.table fread
+#' @importFrom dplyr mutate left_join
+#' @importFrom tidyr separate
+#' @importFrom ComplexHeatmap Heatmap
+#' @importFrom circlize colorRamp2
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom ggrepel geom_label_repel
+#' @importFrom gridExtra grid.arrange
+#' @export
 plot_foldenrich_fullheatmap <- function(local_dir, infile, annotation_file, output_fileprefix) {
+    library(data.table)
+    library(tidyverse)
+    library(pheatmap)
+    library(RColorBrewer)
+    library(ggrepel)
+    library(pheatmap)
+    library(tidyr)
+    library(dplyr)
+    library(ggplot2)
+    library(ComplexHeatmap)
+    library(circlize)
+
   # Load input file
   input_file <- file.path(local_dir, infile)
 
@@ -29,7 +58,7 @@ plot_foldenrich_fullheatmap <- function(local_dir, infile, annotation_file, outp
 
   read_df <- read_df[complete.cases(read_df), ]
 
-  # Compute Enrichment: observed/expected and take log2
+  # Compute log2 fold enrichment (observed/expected)
   read_df <- read_df %>%
     mutate(
       inbed = as.numeric(read_df[, 4]),
@@ -291,7 +320,6 @@ annotation_file <- "roadmap_annotation.txt"
 generate_decile_heatmaps(elements, local_dir, annotation_file)
 
 
-
 #########################################################
 #                                                       #
 # TFBS VOLCANO PLOT                                     #
@@ -373,7 +401,6 @@ infile <- "StatisticSummaryFile_wgEncodeRegTfbsCluster_tl_topsnps.txt"
 plot_tf_volcano(local_dir, infile)
 
 
-
 #############################################################
 #                                                           #
 # DNASE PROM ENH DYADIC                                     #
@@ -382,7 +409,6 @@ plot_tf_volcano(local_dir, infile)
 
 # VIOLINBOX PLOT effect size distribution vs chromatin state
 # FULL Dataset and not decile data
-
 
 generate_violinbox_fullplot_dnase <- function(file_path, save_dir) {
 
@@ -475,7 +501,6 @@ file_list <- list.files("gregor/fulluniq/DNase_promenhdyadic_annotations", patte
 
 # Apply the generate_plot function to each file, passing in the output directory for saving plots
 lapply(file_list, generate_violinbox_fullplot_dnase, save_dir = output_directory)
-
 
 
 #################################################
@@ -1058,18 +1083,6 @@ result <- data.frame(
 
 print(result)
 
-# > print(result)
-#           SNP  RegulatoryRegion Location Range.start Range.end Range.width
-# 1 rs115070172   7_Weak_Enhancer    chr11    67326424  67328824        2401
-# 2   rs4930437   2_Weak_Promoter    chr11    67329624  67330224         601
-# 3   rs7927381 3_Poised_Promoter    chr11    67346624  67347824        1201
-# 4   rs3082142      12_Repressed    chr11    67347824  67350024        2201
-#   Range.names
-# 1      348001
-# 2      348004
-# 3      348013
-# 4      348014
-
 
 # Finding first nearest regulatory regions
 nearest_hits <- nearest(snp_ranges, reg_regions)
@@ -1155,13 +1168,6 @@ for (i in 1:length(snp_ranges)) {
 }
 
 print(results)
-
-# > print(results)
-#           SNP NearestRegulatoryRegion Location             Range Distance
-# 1 rs115070172       5_Strong_Enhancer    chr11 67326224-67326424     -882
-# 2   rs4930437       4_Strong_Enhancer    chr11 67329224-67329624     -471
-# 3   rs7927381            12_Repressed    chr11 67344624-67346624    -2119
-# 4   rs3082142       3_Poised_Promoter    chr11 67346624-67347824    -2035
 
 
 ############################################################
@@ -1302,7 +1308,6 @@ plot_foldenrich_fullheatmap <- function(local_dir, infile, annotation_file, outp
 
   # Return the clustering order of rows and columns
   return(list(row_order = row_order, column_order = column_order))
-
   #return(ht_list)
 
 }
@@ -1852,72 +1857,63 @@ decile_pheatmap_based(elements, local_dir, annotation_file)
 #########################################
 
 
-# Ensure necessary libraries are loaded
+# Load Libraries
 library(data.table)
 library(tidyr)
 library(dplyr)
 library(pheatmap)
 library(reshape2)
 
+# Define global variables
 elements <- c("E116", "E034", "E032", "E051", "E046")
-
-# Local dir
 local_dir <- "gregor/decileuniq"
 
-for (cell_id in elements){
-    #cell_id <- "E046"
-    infile <- paste0(cell_id, "-StatisticSummaryFile_chromHMM_15state_tl_topsnps.txt")
-    annotation_file="roadmap_annotation.txt"
+# Function to generate pheatmap
+generate_pheatmap <- function(cell_id) {
+  infile <- paste0(cell_id, "-StatisticSummaryFile_chromHMM_15state_tl_topsnps.txt")
+  input_file <- file.path(local_dir, infile)
 
-    input_file <- file.path(local_dir, infile)
+  # Read and preprocess data
+  read_df <- fread(input_file, header = FALSE)
+  names(read_df) <- c("Bed_File", "InBed_Index_SNP", "ExpectNum_of_InBed_SNP",  "ID")
+  
+  read_df <- read_df %>%
+    as.data.frame() %>%
+    separate(Bed_File, c("celltype", "chromState", "txt"), sep = "[.]") %>%
+    separate(ID, c("PValue", "DecileID"), sep = "[ ]")
 
-    read_df <- fread(input_file, header = F)
-    names(read_df) <- c("Bed_File", "InBed_Index_SNP", "ExpectNum_of_InBed_SNP",  "ID")
-    
-    read_df <-  read_df %>% as.data.frame() %>%
-      separate(Bed_File, c("celltype", "chromState", "txt"), sep = "[.]") %>%
-      separate(ID, c("PValue", "DecileID"), sep = "[ ]")
+  read_df$PValue <- as.numeric(read_df$PValue)
+  read_df <- read_df[complete.cases(read_df), ]
+  read_tf <- dcast(read_df, DecileID ~ chromState, value.var = "PValue")
 
-    read_df$PValue <- as.numeric(read_df$PValue)
-    read_df <- read_df[complete.cases(read_df), ]
-    read_tf <- read_df %>% dcast(DecileID ~ chromState, value.var = "PValue")
+  # Transform data for heatmap
+  data <- read_tf[, 2:ncol(read_tf)]
+  mat_data <- apply(data, 2, function(x) -log10(as.numeric(x)))
+  mat_data[is.na(mat_data)] <- 0
 
-    data <- read_tf[, 2:ncol(read_tf)]
-    mat_data <- apply(as.matrix.noquote(data), 2, as.numeric)
+  colnames(mat_data) <- colnames(data)
+  rownames(mat_data) <- read_tf$DecileID
 
-    mat_data <- -log10(mat_data)
-    mat_data[is.na(mat_data)] <- 0
+  # Specify desired column and row order
+  order_vec_cols <- c("1_TssA", "2_TssAFlnk", "3_TxFlnk", "4_Tx", "5_TxWk", "6_EnhG", "7_Enh",
+               "8_ZNF-Rpts", "9_Het", "10_TssBiv", "11_BivFlnk", "12_EnhBiv", "13_ReprPC",
+               "14_ReprPCWk", "15_Quies")
+  order_vec_rows <- rev(sprintf("decile%d", 1:10))
 
-    colnames(mat_data) <- colnames(data)
-    rownames(mat_data) <- read_tf$DecileID
+  # Order the matrix rows and columns
+  mat_ordered <- mat_data[order_vec_rows, order_vec_cols]
 
-    # Desired column and row order
-    order_vec_cols <- c("1_TssA", "2_TssAFlnk", "3_TxFlnk", "4_Tx", "5_TxWk", "6_EnhG", "7_Enh",
-                 "8_ZNF-Rpts", "9_Het", "10_TssBiv", "11_BivFlnk", "12_EnhBiv", "13_ReprPC",
-                 "14_ReprPCWk", "15_Quies")
-
-    order_vec_rows <- rev(c("decile1", "decile2", "decile3", "decile4", "decile5", "decile6",
-                        "decile7", "decile8", "decile9", "decile10"))
-
-    # Order the matrix rows and columns
-    mat_ordered <- mat_data[order_vec_rows, order_vec_cols]
-
-
-    output_file <- file.path(local_dir, paste0(cell_id, "chromHMM_15state_tl_topsnpsClusterOff.pdf"))
-
-    pdf(output_file)
-
-    pheatmap(mat_ordered,
-      cluster_rows = FALSE, cluster_cols = FALSE,
-      fontsize_row = 8,
-      fontsize_col = 9,
-      #annotation_row = annotation_row,
-      #annotation_colors = mat_colors,
-      annotation_legend = FALSE,
-      legend_labels = "-log10(PValue)",
-      main = paste(cell_id, "Decile-eQTL-Enrichment")
-    )
-
-    dev.off()
-
+  # Generate heatmap
+  output_file <- file.path(local_dir, paste0(cell_id, "chromHMM_15state_tl_topsnpsClusterOff.pdf"))
+  pdf(output_file)
+  pheatmap(mat_ordered, cluster_rows = FALSE, cluster_cols = FALSE,
+           fontsize_row = 8, fontsize_col = 9, annotation_legend = FALSE,
+           legend_labels = "-log10(PValue)", main = paste(cell_id, "Decile-eQTL-Enrichment"))
+  dev.off()
 }
+
+# Apply function to each element
+for (cell_id in elements) {
+  generate_pheatmap(cell_id)
+}
+
