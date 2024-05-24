@@ -1,6 +1,3 @@
-
----
-
 # cis-e/sQTL Annotation and Enrichment Analysis
 
 This repository includes two scripts for annotation and enrichment analysis tasks using GREGOR and the Variant Effect Predictor (VEP).
@@ -33,6 +30,3 @@ Annotation using VEP.
 ## Notes
 - Adjust the resource specifications in Slurm commands based on your system’s capabilities.
 - Ensure that the correct paths and modules are specified for both tools in their respective scripts.
-
----
-
