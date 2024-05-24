@@ -30,7 +30,7 @@ Annotation using VEP.
 - `cache_directory`: Directory for VEP cache and plugins.
 ```
 
-## Important Notes
+## Notes
 - Adjust the resource specifications in Slurm commands based on your system’s capabilities.
 - Ensure that the correct paths and modules are specified for both tools in their respective scripts.
 
