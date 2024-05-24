@@ -25,7 +25,7 @@ Analysis using GREGOR.
 Annotation using VEP.
 #### Parameters
 ```
-- `vcf_file`: Path to the VCF file for annotation.
+- `vcf_file`: Path to the VCF formatted QTL file for annotation.
 - `output_file`: Path for the annotated VCF.
 - `cache_directory`: Directory for VEP cache and plugins.
 ```
