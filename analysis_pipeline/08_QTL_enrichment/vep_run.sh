@@ -49,16 +49,22 @@ build_vep_cache() {
 annotate_sqtls_with_vep() {
     echo -e "\nAnnotation of sQTLs with VEP ....\n"
 
-    vep --input_file $vcf_file \
-        --format vcf \
-        --output_file $output_file \
-        --vcf \
-        --cache \
-        --regulatory \
-        --fork 4 \
-        --dir_cache $cache_dir \
-        --plugin LoF,loftee_path:$cache_dir/Plugins/loftee \
-        --dir_plugins $cache_dir/Plugins/loftee
+    sbatch --job-name="VEP_Annotation" \
+           --output="vep_annotation_%j.out" \
+           --error="vep_annotation_%j.err" \
+           --time=02:00:00 \
+           --cpus-per-task=4 \
+           --mem=16GB \
+           --wrap="vep --input_file $vcf_file \
+                --format vcf \
+                --output_file $output_file \
+                --vcf \
+                --cache \
+                --regulatory \
+                --fork 4 \
+                --dir_cache $cache_dir \
+                --plugin LoF,loftee_path:$cache_dir/Plugins/loftee \
+                --dir_plugins $cache_dir/Plugins/loftee"
 }
 
 
