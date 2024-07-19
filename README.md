@@ -49,7 +49,7 @@ Code used to produce major figures/panels in the manuscript is made available in
 
 For more information about the MAGE resource as well as analyses performed using this resource, please see our paper:
 
-**[Sources of gene expression variation in a globally diverse human cohort](https://www.biorxiv.org/content/10.1101/2023.11.04.565639)**<br>
+**[Sources of gene expression variation in a globally diverse human cohort](https://doi.org/10.1038/s41586-024-07708-2)**<br>
 Dylan J. Taylor, Surya B. Chhetri, Michael G. Tassia, Arjun Biddanda, Stephanie M. Yan, Genevieve L. Wojcik, Alexis Battle, Rajiv C. McCoy
 
 ### Citing MAGE
