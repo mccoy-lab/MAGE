@@ -6,6 +6,22 @@
 
 # MAGE: Multi-ancestry Analysis of Gene Expression
 
+## ⚠️ 2026-03-27 IMPORTANT NOTICE - SAMPLE SWAP ⚠️
+
+**A sample swap has been detected:**
+- Library SRR19762530 is labeled as being derived from HG00237; **it is actually derived from NA11919**.
+  - This library was NOT used for downstream QTL mapping. The HG00237 library used for QTL mapping was SRR19762247.
+- Library SRR19762653 is labled as being derived from NA11919; **it is actually derived from HG00237**.
+  - This library WAS used for downstream QTL mapping.
+- Status: NCBI SRA has been notified (Date: 2026-03-27)
+- Corrected data will be uploaded to the Zenodo when ready
+
+**USE THIS DATA WITH CAUTION** until corrections are complete.
+
+Thank you Dr. Steven M. Heaton for making us aware of this issue.
+
+---
+
 [![DOI](https://zenodo.org/badge/451943672.svg)](https://zenodo.org/doi/10.5281/zenodo.10072080)
 
 MAGE comprises RNA-seq data from lymphoblastoid cell lines derived from 731 individuals from the [1000 Genomes Project (1KGP)](https://doi.org/10.1038/nature15393), representing 26 globally-distributed populations across five continental groups. These data offer a large, geographically diverse, open access resource to facilitate studies of the distribution, genetic underpinnings, and evolution of variation in human transcriptomes and include data from several ancestry groups that were poorly represented in previous studies.
