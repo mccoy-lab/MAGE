@@ -13,10 +13,15 @@
   - This library was NOT used for downstream QTL mapping. The HG00237 library used for QTL mapping was SRR19762247.
 - Library SRR19762653 is labled as being derived from NA11919; **it is actually derived from HG00237**.
   - This library WAS used for downstream QTL mapping.
-- Status: NCBI SRA has been notified (Date: 2026-03-27)
-- Corrected data will be uploaded to the Zenodo when ready
 
-**USE THIS DATA WITH CAUTION** until corrections are complete.
+
+**UPDATED STATUS 2026-04-03**
+- Two new runs have been added to BioProject PRJNA851328 to correct this sample swap:
+  - SRR37907959 derives from HG00237
+  - SRR37907958 derives from NA11919
+- These runs replace the incorrect labeled SRR19762530 and SRR19762653 runs
+  - A small note: SRR19762530 and SRR19762653 were re-labeled on SRA before being replaced. So SRR19762530 will appear as being derived from NA11919 if you look it up on SRA now.
+- **The zenodo has NOT been updated yet. Please continue to use these data with caution.**
 
 Thank you Dr. Steven M. Heaton for making us aware of this issue.
 
