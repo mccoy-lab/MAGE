@@ -1,0 +1,22 @@
+name: leafcutter_analysis_scripts
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - python=3
+  - pip
+  - pip:
+      - gzip
+      - argparse
+      - pandas
+      - numpy
+      - subprocess
+      - contextlib
+      - datetime
+      - tempfile
+      - shutil
+      - glob
+      - sklearn.decomposition
+      - qtl.io
+  - davidaknowles::r-leafcutter
+  - r-argparser

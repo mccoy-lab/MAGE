@@ -1,3 +1,5 @@
 workflow/bin/leafcutter/
 logs/
 .snakemake/
+results/
+data/

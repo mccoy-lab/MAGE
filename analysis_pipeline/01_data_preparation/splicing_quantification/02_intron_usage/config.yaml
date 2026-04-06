@@ -1,2 +1,4 @@
-metadata: '/scratch4/battle-mccoy/sharedData/MAGE.v1.1.data/sample_library_info/sample.metadata.MAGE.v1.1.txt'
+focal_metadata: '/scratch4/battle-mccoy/sharedData/MAGE.v1.1.data/sample_library_info/sample.metadata.MAGE.v1.1.txt'
+total_metadata: '/scratch4/battle-mccoy/sharedData/MAGE.v1.1.data/sample_library_info/sequencing_library.metadata.MAGE.v1.1.txt'
 bam_dir: '/scratch4/battle-mccoy/sharedData/MAGE.v1.1.data/star_alignments/'
+gencode_url: 'https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz'
