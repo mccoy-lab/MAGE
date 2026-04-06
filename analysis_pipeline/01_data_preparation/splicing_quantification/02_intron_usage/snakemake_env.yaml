@@ -1,0 +1,21 @@
+name: smk7
+channels:
+  - conda-forge
+  - bioconda
+  - r
+dependencies:
+  - mamba<2.00
+  - bcftools
+  - samtools
+  - pip
+  - snakemake<=7.32.0
+  - bedops
+  - pigz
+  - polars
+  - r-tidyverse
+  - biopython
+  - pip:
+    - tqdm
+    - numpy
+    - scipy
+    - pandas

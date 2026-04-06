@@ -22,6 +22,7 @@ The `01_align_dev.sh` script uses VCF files from 1000 Genomes samples to perform
 Choices of parameters were inspired by code from [TOPMed](https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md). The script outputs BAM alignment files.
 
 ## Splicing quantification with Leafcutter
+**NOTE: THIS STEP AND THE FOLLOWING STEP HAVE BEEN INTEGRATED INTO A SINGLE SNAKEMAKE PIPELINE**
 
 The `02_intron_usage.sh` script will use the `STAR` alignments generated in the previous section to estimate intron cluster usage per sample. Following, intron usage estimates are aggregated across all samples and consolidated into a single file. The focal outputs from this script are `*._perind_numers.counts.gz` and `*perind.counts.gz` which contain ***counts*** of intron cluster usage and ***ratios***, respectively.<br>
 
