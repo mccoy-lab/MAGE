@@ -6,4 +6,6 @@ This directory contains the snakemake pipeline for performing `leafcutter` to co
 
 #### Output
 
-#### Pipeline DAG
+#### Rulegraph
+
+![rulegraph](rg.png)

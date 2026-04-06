@@ -61,7 +61,7 @@ rule install_leafcutter:
         git clone https://github.com/davidaknowles/leafcutter.git workflow/bin/leafcutter
         """
 
-rule intron_usage:
+rule measure_intron_usage:
 # Run regtools to quantify intron usage for each bam file in a directory
     input:
         bam = config["bam_dir"] + "{sample}.bam",
