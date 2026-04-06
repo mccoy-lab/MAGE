@@ -32,10 +32,9 @@ pandas dataframes and extract the `internal_libraryID` column as a list that can
 for iterating over samples in the workflow.
 '''
 focal_metadata_df = pd.read_csv(config["focal_metadata"], sep="\t")
-total_metadata_df = pd.read_csv(config["total_metadata"], sep="\t")
 focal_libraries = focal_metadata_df["internal_libraryID"].tolist()
+total_metadata_df = pd.read_csv(config["total_metadata"], sep="\t")
 total_libraries = total_metadata_df["internal_libraryID"].tolist()
-
 
 #--- RULES ---#
 localrules:
@@ -43,11 +42,15 @@ localrules:
     install_leafcutter,
     create_junc_list,
     download_gencode_gtf,
-    extract_exons_from_gencode
+    extract_exons_from_gencode,
+    make_focal_library_list,
+    make_sample_lookup_file
 
 rule all:
     input:
-        "results/leafcutter/mage_v1.1_perind.counts.gz"
+        "results/leafcutter_analysis/mage_v1.1_perind.counts.filtered.gz",
+        "results/leafcutter_analysis/mage_v1.1_perind.counts.normed.genes.filtered.bed.gz",
+        "results/leafcutter_analysis/mage_v1.1_perind.counts.normed.genes.filtered.phenotype_groups.txt"
 
 rule install_leafcutter:
 # Clone leafcutter repo to get the cluster_regtools.py script for intron usage quantification
@@ -99,7 +102,7 @@ rule leafcutter_cluster_regtools:
                        sample=total_libraries)
     output:
         ratios = "results/leafcutter/mage_v1.1_perind.counts.gz",
-        leafcutter_dir = directory("results/leafcutter/")
+        leafcutter_dir = protected(directory("results/leafcutter/"))
     conda:
         "envs/leafcutter_env.yaml"
     resources:
@@ -133,7 +136,7 @@ rule extract_exons_from_gencode:
         exon_extract_script = "workflow/bin/extract_exons_from_gtf.py",
         gencode = rules.download_gencode_gtf.output.gencode
     output:
-        temp("results/gencode/gencode_exons.bed")
+        temp("results/leafcutter_analysis/gencode_exons.bed")
     conda: 
         "envs/leafcutter_analysis_scripts.yaml"
     shell:
@@ -162,14 +165,60 @@ rule map_clusters_to_genes:
             {output}
         """
 
-# rule filter_normalized_splice_quants:
-#     # Filter out lowly expressed and low-complexity splicing clusters
-#     # Note: Older versions of this script used --keep_samples to subset to focal samples;
-#     #       however, this filtering step is now integrated into the create_junc_list rule
-#     input:
-#         filtering_script = "workflow/bin/filter_quants.py",
-#         leafcutter_out_dir = rules.leafcutter_cluster_regtools.output.leafcutter_dir,
-#         gencode = rules.download_gencode_gtf.output.gencode
-#     output:
+rule make_focal_library_list:
+    # Create list of focal libraries to keep after filtering splice quants
+    input:
+        focal_metadata = config["focal_metadata"]
+    output:
+        "results/leafcutter_analysis/keep_samples.txt"
+    shell:
+        """
+        cut -f 2 {input.focal_metadata} |\
+        tail -n +2 > {output}
+        """
+
+rule make_sample_lookup_file:
+    # Create a lookup file to map internal_libraryID to samplekgpID for leafcutter filtering script
+    input:
+        sample_lookup_script = "workflow/bin/generate_sample_lookup.sh",
+        total_metadata = config["total_metadata"],
+        leafcutter_output_dir = rules.leafcutter_cluster_regtools.output.leafcutter_dir
+    output:
+        "results/leafcutter_analysis/sample_lookup.txt"
+    shell:
+        """
+        {input.sample_lookup_script} \
+            {input.total_metadata} \
+            {input.leafcutter_output_dir}
+        """
+
+rule filter_normalized_splice_quants:
+    # Filter out lowly expressed and low-complexity splicing clusters
+    input:
+        filtering_script = "workflow/bin/filter_quants.py",
+        prep_script = "workflow/bin/leafcutter/scripts/prepare_phenotype_table.py",
+        leafcutter_out_dir = rules.leafcutter_cluster_regtools.output.leafcutter_dir,
+        gencode = rules.download_gencode_gtf.output.gencode,
+        clusters_to_genes = rules.map_clusters_to_genes.output,
+        keep_samples = rules.make_focal_library_list.output,
+        sample_lookup_file = rules.make_sample_lookup_file.output
+    output:
+        filtered_quants = "results/leafcutter_analysis/mage_v1.1_perind.counts.filtered.gz",
+        normalized_quants = "results/leafcutter_analysis/mage_v1.1_perind.counts.normed.genes.filtered.bed.gz",
+        intron_gene_map = "results/leafcutter_analysis/mage_v1.1_perind.counts.normed.genes.filtered.phenotype_groups.txt"
+    conda:
+        "envs/leafcutter_analysis_scripts.yaml"
+    shell:
+        """
+        python {input.filtering_script} \
+            {input.leafcutter_out_dir} \
+            mage_v1.1 \
+            {input.sample_lookup_file} \
+            {input.gencode} \
+            --keep_samples {input.keep_samples} \
+            --pct_cutoff 10 \
+            --leafcutter_prep_script {input.prep_script} \
+            --output_dir 
+        """
 
 

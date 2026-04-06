@@ -16,7 +16,11 @@ dependencies:
       - tempfile
       - shutil
       - glob
+      - sklearn
       - sklearn.decomposition
       - qtl.io
+      - scipy
+      - pickle
+      - optparse
   - davidaknowles::r-leafcutter
   - r-argparser
