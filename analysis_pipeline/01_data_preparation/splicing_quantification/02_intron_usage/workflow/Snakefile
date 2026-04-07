@@ -93,7 +93,7 @@ rule create_junc_list:
         ls results/junc/*.junc > {output}
         """
 
-rule leafcutter_cluster_regtools:
+rule leafcutter_cluster_introns:
 # Run leafcutter's cluster_regtools.py script to cluster introns based on the regtools output
     input:
         junc_list = rules.create_junc_list.output,
@@ -151,7 +151,7 @@ rule map_clusters_to_genes:
 # with exon coordinates extracted from gencode annotation
     input:
         mapping_script = "workflow/bin/map_clusters_to_genes.R",
-        leafcutter_clusters = rules.leafcutter_cluster_regtools.output,
+        leafcutter_clusters = rules.leafcutter_cluster_introns.output,
         exon_bed = rules.extract_exons_from_gencode.output
     output:
         "results/leafcutter_analysis/clusters_to_genes.txt"
@@ -170,7 +170,7 @@ rule make_focal_library_list:
     input:
         focal_metadata = config["focal_metadata"]
     output:
-        "results/leafcutter_analysis/keep_samples.txt"
+        temp("results/leafcutter_analysis/keep_samples.txt")
     shell:
         """
         cut -f 2 {input.focal_metadata} |\
@@ -182,9 +182,9 @@ rule make_sample_lookup_file:
     input:
         sample_lookup_script = "workflow/bin/generate_sample_lookup.sh",
         total_metadata = config["total_metadata"],
-        leafcutter_output_dir = rules.leafcutter_cluster_regtools.output.leafcutter_dir
+        leafcutter_output_dir = rules.leafcutter_cluster_introns.output.leafcutter_dir
     output:
-        "results/leafcutter_analysis/sample_lookup.txt"
+        temp("results/leafcutter_analysis/sample_lookup.txt")
     shell:
         """
         {input.sample_lookup_script} \
@@ -197,7 +197,7 @@ rule filter_normalized_splice_quants:
     input:
         filtering_script = "workflow/bin/filter_quants.py",
         prep_script = "workflow/bin/leafcutter/scripts/prepare_phenotype_table.py",
-        leafcutter_out_dir = rules.leafcutter_cluster_regtools.output.leafcutter_dir,
+        leafcutter_out_dir = rules.leafcutter_cluster_introns.output.leafcutter_dir,
         gencode = rules.download_gencode_gtf.output.gencode,
         clusters_to_genes = rules.map_clusters_to_genes.output,
         keep_samples = rules.make_focal_library_list.output,
@@ -220,5 +220,3 @@ rule filter_normalized_splice_quants:
             --leafcutter_prep_script {input.prep_script} \
             --output_dir 
         """
-
-

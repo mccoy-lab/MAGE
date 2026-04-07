@@ -3,24 +3,14 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
-  - python=3
-  - pip
-  - pip:
-      - gzip
-      - argparse
-      - pandas
-      - numpy
-      - subprocess
-      - contextlib
-      - datetime
-      - tempfile
-      - shutil
-      - glob
-      - sklearn
-      - sklearn.decomposition
-      - qtl.io
-      - scipy
-      - pickle
-      - optparse
+  - python
+  - pybigwig
   - davidaknowles::r-leafcutter
   - r-argparser
+  - pip
+  - pip:
+      - pandas
+      - numpy
+      - scikit-learn
+      - qtl
+      - scipy
