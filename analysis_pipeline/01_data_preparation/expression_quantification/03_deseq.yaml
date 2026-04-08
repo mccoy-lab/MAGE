@@ -1,0 +1,16 @@
+name: deseq2
+channels:
+  - conda-forge
+  - bioconda
+  - r
+dependencies:
+  - python
+  - jupyter
+  - r-irkernel
+  - r-languageserver
+  - bioconductor-deseq2=1.40.2
+  - r-tidyverse
+  - r-languageserver
+  - r-knitr
+  - r-rmarkdown
+  - r-yaml

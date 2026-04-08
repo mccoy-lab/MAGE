@@ -1,0 +1,4 @@
+salmon_dir: "/data/rmccoy22/1KGP_RNASEQ/salmon_quantification/"
+filtered_expression_bed: "/scratch4/battle-mccoy/sharedData/MAGE.v1.1.data/QTL_results/eQTL_results/expression_quants/TMM.filtered.TSS.MAGE.v1.1.bed.gz"
+gencode_url: "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz"
+metadata: "/scratch4/battle-mccoy/sharedData/MAGE.v1.1.data/sample_library_info/sequencing_library.metadata.MAGE.v1.1.txt"

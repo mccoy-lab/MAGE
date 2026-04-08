@@ -2,10 +2,11 @@ name: leafcutter_analysis_scripts
 channels:
   - bioconda
   - conda-forge
+  - r
 dependencies:
+  - davidaknowles::r-leafcutter
   - python
   - pybigwig
-  - davidaknowles::r-leafcutter
   - r-argparser
   - pip
   - pip:
