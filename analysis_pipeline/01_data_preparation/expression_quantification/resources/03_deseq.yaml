@@ -9,6 +9,8 @@ dependencies:
   - r-irkernel
   - r-languageserver
   - bioconductor-deseq2=1.40.2
+  - bioconductor-tximportdata
+  - bioconductor-genomicfeatures
   - r-tidyverse
   - r-languageserver
   - r-knitr
