@@ -8,9 +8,10 @@ dependencies:
   - jupyter
   - r-irkernel
   - r-languageserver
-  - bioconductor-deseq2=1.40.2
+  - bioconductor-deseq2
+  - bioconductor-tximport
   - bioconductor-tximportdata
-  - bioconductor-genomicfeatures
+  - bioconductor-txdbmaker
   - r-tidyverse
   - r-languageserver
   - r-knitr

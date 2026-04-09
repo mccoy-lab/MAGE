@@ -4,10 +4,13 @@ channels:
   - conda-forge
   - r
 dependencies:
-  - davidaknowles::r-leafcutter
+  - r-base=3.6.1
+# - davidaknowles::r-leafcutter
+  - r-argparser
+  - r-devtools
+  - r-rstan
   - python
   - pybigwig
-  - r-argparser
   - pip
   - pip:
       - pandas
