@@ -69,7 +69,7 @@ rule measure_intron_usage:
     output:
         junc = temp("results/junc/{sample}.Aligned.sortedByCoord.out.bam.junc")
     conda:
-        "envs/leafcutter_env.yaml"
+        "envs/leafcutter_preprocessing.yaml"
     shell:
         """
         regtools junctions extract \
@@ -104,7 +104,7 @@ rule leafcutter_cluster_introns:
         ratios = "results/leafcutter/mage_v1.1_perind.counts.gz",
         leafcutter_dir = protected(directory("results/leafcutter/"))
     conda:
-        "envs/leafcutter_env.yaml"
+        "envs/leafcutter_preprocessing.yaml"
     resources:
         time="48:00:00",
         mem_mb=16000
@@ -138,7 +138,7 @@ rule extract_exons_from_gencode:
     output:
         temp("results/leafcutter_analysis/gencode_exons.bed")
     conda: 
-        "envs/leafcutter_analysis_scripts.yaml"
+        "envs/leafcutter_analysis.yaml"
     shell:
         """
         python {input.exon_extract_script} \
@@ -156,7 +156,7 @@ rule map_clusters_to_genes:
     output:
         "results/leafcutter_analysis/clusters_to_genes.txt"
     conda:
-        "envs/leafcutter_analysis_scripts.yaml"
+        "envs/leafcutter_R.yaml"
     shell:
         """
         Rscript {input.mapping_script} \
@@ -207,7 +207,9 @@ rule filter_normalized_splice_quants:
         normalized_quants = "results/leafcutter_analysis/mage_v1.1_perind.counts.normed.genes.filtered.bed.gz",
         intron_gene_map = "results/leafcutter_analysis/mage_v1.1_perind.counts.normed.genes.filtered.phenotype_groups.txt"
     conda:
-        "envs/leafcutter_analysis_scripts.yaml"
+        "envs/leafcutter_analysis.yaml"
+    params:
+        output_dir = "results/leafcutter_analysis/"
     shell:
         """
         python {input.filtering_script} \
@@ -218,5 +220,5 @@ rule filter_normalized_splice_quants:
             --keep_samples {input.keep_samples} \
             --pct_cutoff 10 \
             --leafcutter_prep_script {input.prep_script} \
-            --output_dir 
+            --output_dir {params.output_dir}
         """

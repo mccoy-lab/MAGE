@@ -4,11 +4,6 @@ channels:
   - conda-forge
   - r
 dependencies:
-  - r-base=3.6.1
-# - davidaknowles::r-leafcutter
-  - r-argparser
-  - r-devtools
-  - r-rstan
   - python
   - pybigwig
   - pip

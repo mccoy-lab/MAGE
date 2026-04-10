@@ -1,0 +1,10 @@
+# YAML from https://github.com/davidaknowles/leafcutter/issues/265#issuecomment-2679783289
+name: leafcutter_R
+channels:
+  - conda-forge
+dependencies:
+  - r-base=4.2.1 
+  - r-rcpp=1.0.10 
+  - r-rstan=2.21.7
+  - r-stanheaders=2.21.0-7 
+  - r-devtools
