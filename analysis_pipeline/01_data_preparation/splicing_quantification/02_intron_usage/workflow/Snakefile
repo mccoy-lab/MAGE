@@ -167,7 +167,7 @@ rule map_clusters_to_genes:
         exon_bed = rules.extract_exons_from_gencode.output,
         leafcutter_R_packages = rules.install_leafcutter_r.output
     output:
-        "results/leafcutter_analysis/clusters_to_genes.txt"
+        temp("results/leafcutter_analysis/clusters_to_genes.txt")
     resources:
         time="4:00:00",
         mem_mb=16000
