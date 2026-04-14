@@ -43,6 +43,7 @@ localrules:
     create_junc_list,
     download_gencode_gtf,
     extract_exons_from_gencode,
+    install_leafcutter_r,
     make_focal_library_list,
     make_sample_lookup_file
 
@@ -146,15 +147,30 @@ rule extract_exons_from_gencode:
             --outputFile {output}
         """
 
+rule install_leafcutter_r:
+# Complete the leafcutter R installation.
+# Temporary output is present only to set precendence on this rule before map_clusters_to_genes
+    input: "workflow/bin/leafcutter_install.R"
+    output: temp("results/leafcutter_R_loaded_packages.txt")
+    conda: "envs/leafcutter_R.yaml"
+    shell:
+        """
+        Rscript {input}
+        """
+
 rule map_clusters_to_genes:
 # Map leafcutter clusters to genes based on overlap 
 # with exon coordinates extracted from gencode annotation
     input:
         mapping_script = "workflow/bin/map_clusters_to_genes.R",
-        leafcutter_clusters = rules.leafcutter_cluster_introns.output,
-        exon_bed = rules.extract_exons_from_gencode.output
+        leafcutter_clusters = rules.leafcutter_cluster_introns.output.ratios,
+        exon_bed = rules.extract_exons_from_gencode.output,
+        leafcutter_R_packages = rules.install_leafcutter_r.output
     output:
         "results/leafcutter_analysis/clusters_to_genes.txt"
+    resources:
+        time="4:00:00",
+        mem_mb=16000
     conda:
         "envs/leafcutter_R.yaml"
     shell:
@@ -173,23 +189,23 @@ rule make_focal_library_list:
         temp("results/leafcutter_analysis/keep_samples.txt")
     shell:
         """
-        cut -f 2 {input.focal_metadata} |\
+        cut -f 2,4 {input.focal_metadata} |\
         tail -n +2 > {output}
         """
 
 rule make_sample_lookup_file:
     # Create a lookup file to map internal_libraryID to samplekgpID for leafcutter filtering script
     input:
-        sample_lookup_script = "workflow/bin/generate_sample_lookup.sh",
+        sample_lookup_script = "workflow/bin/generate_sample_lookup.py",
         total_metadata = config["total_metadata"],
         leafcutter_output_dir = rules.leafcutter_cluster_introns.output.leafcutter_dir
     output:
         temp("results/leafcutter_analysis/sample_lookup.txt")
     shell:
         """
-        {input.sample_lookup_script} \
-            {input.total_metadata} \
-            {input.leafcutter_output_dir}
+        python {input.sample_lookup_script} \
+            {input.leafcutter_output_dir} \
+            {input.total_metadata} > {output}
         """
 
 rule filter_normalized_splice_quants:
@@ -210,6 +226,9 @@ rule filter_normalized_splice_quants:
         "envs/leafcutter_analysis.yaml"
     params:
         output_dir = "results/leafcutter_analysis/"
+    resources:
+        time="4:00:00",
+        mem_mb=32000
     shell:
         """
         python {input.filtering_script} \
@@ -217,8 +236,10 @@ rule filter_normalized_splice_quants:
             mage_v1.1 \
             {input.sample_lookup_file} \
             {input.gencode} \
+            {input.clusters_to_genes} \
             --keep_samples {input.keep_samples} \
             --pct_cutoff 10 \
             --leafcutter_prep_script {input.prep_script} \
-            --output_dir {params.output_dir}
+            --output_dir {params.output_dir} \
+            --autosomes_chrX
         """

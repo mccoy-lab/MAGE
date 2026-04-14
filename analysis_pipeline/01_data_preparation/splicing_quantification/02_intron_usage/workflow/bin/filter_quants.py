@@ -54,7 +54,7 @@ if __name__=='__main__':
 	print(f'[{datetime.now().strftime("%b %d %H:%M:%S")}] leafcutter filtering')
 
 	print('  * preparing data')
-	counts_df = pd.read_csv(args.leafcutter_output_dir+'/'+args.leafcutter_output_prefix+'_perind.counts.gz', sep='\s+').set_index('chrom')
+	counts_df = pd.read_csv(args.leafcutter_output_dir+'/'+args.leafcutter_output_prefix+'_perind.counts.gz', sep=r'\s+').set_index('chrom')
 	col_dict = {i:i.split('.')[0] for i in counts_df.columns}
 	counts_df.rename(columns=col_dict, inplace=True)
 	sample_participant_lookup_s = pd.read_csv(args.sample_participant_lookup,
@@ -91,7 +91,6 @@ if __name__=='__main__':
 				  removed_introns, introns,
 				   prefilter_introns, clusters, prefilter_clusters)
 			)
-
 
 
 	print('  * filtering counts')

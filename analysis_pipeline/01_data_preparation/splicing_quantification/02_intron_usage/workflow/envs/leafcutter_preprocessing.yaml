@@ -1,4 +1,4 @@
-name: leafcutter
+name: leafcutter_preprocessing
 channels:
   - bioconda
   - conda-forge

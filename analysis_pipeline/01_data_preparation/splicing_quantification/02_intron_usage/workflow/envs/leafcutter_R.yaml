@@ -8,3 +8,4 @@ dependencies:
   - r-rstan=2.21.7
   - r-stanheaders=2.21.0-7 
   - r-devtools
+  - r-argparser
