@@ -1,9 +1,8 @@
 # MAGE Splicing Quantification
 
-This directory contains code to replicate the splicing quantification procedure done as part of the initial MAGE publication. This procedure is broadly split into three sections:
-1. Variant-aware read mapping with STAR
-2. Annotation-agnostic estimation of intron excision with [Leafcutter](https://davidaknowles.github.io/leafcutter/)
-3. Filtering and normalization for sQTL analsyses
+This directory contains code to replicate the splicing quantification procedure done as part of the MAGE v.1.1 release. This procedure is broadly split into two sections:
+1. Variant-aware read-mapping with [STAR](https://github.com/alexdobin/STAR)
+2. Annotation-agnostic estimation of intron excision with [Leafcutter](https://davidaknowles.github.io/leafcutter/) and subsequent filtering and normalization for sQTL mapping analyses
 
 *Note: these steps should be run in order*<br><br>
 
@@ -22,26 +21,12 @@ The `01_align_dev.sh` script uses VCF files from 1000 Genomes samples to perform
 Choices of parameters were inspired by code from [TOPMed](https://github.com/broadinstitute/gtex-pipeline/blob/master/TOPMed_RNAseq_pipeline.md). The script outputs BAM alignment files.
 
 ## Splicing quantification with Leafcutter
-**NOTE: THIS STEP AND THE FOLLOWING STEP HAVE BEEN INTEGRATED INTO A SINGLE SNAKEMAKE PIPELINE**
 
-The `02_intron_usage.sh` script will use the `STAR` alignments generated in the previous section to estimate intron cluster usage per sample. Following, intron usage estimates are aggregated across all samples and consolidated into a single file. The focal outputs from this script are `*._perind_numers.counts.gz` and `*perind.counts.gz` which contain ***counts*** of intron cluster usage and ***ratios***, respectively.<br>
+The [`02_intron_usage/`](./02_intron_usage/) directory contains a snakemake pipeline for quantifying intron excision ratios with [Leafcutter](https://davidaknowles.github.io/leafcutter/) using the `STAR` alignments generated in the previous section. Intron usage estimates are aggregated across all samples and then filtered for clusters bearing either low-expression or low-complexity.
 
-The script takes a single argument that is the path to the STAR output directory containing BAM files and their respective indices.<br>
-*Before running this script, install `leafcutter` following the instructions [here](https://davidaknowles.github.io/leafcutter/articles/Installation.html).*<br><br>
-
-## Filtering and normalization for sQTL analyses
-
-The `03_map_and_filter_clusters.sh` script will filter out lowly expressed and low-complexity splicing clusters. It will output three files:
+The primary outputs of this pipeline are the following:
 1. Raw filtered intron excision ratios (no normalization)
 2. Normalized filtered intron excision ratios
 3. A file mapping introns to genes
 
-The script takes seven arguments:
-1. `gencodeGTF`: The Gencode transcript GTF file, used for mapping introns to genes (we used the Gencode v38 files [here](https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz))
-2. `leafcutterOutDir`: The directory containing leafcutter files from the previous step
-3. `leafcutterOutPrefix`: Prefix of Leafcutter output files (i.e. everything before `_perind_numers.counts.gz` and `_perind.counts.gz`)
-4. `sampleLookupFile`: A file mapping columns of the leafcutter files to sampleIDs (to be included in the output file). Should be a two-column tab-separated file
-5. `selectedSampleList`: A file listing the samples to include in the output file. If one column, will subset to the corresponding samples (after renaming from the previous argument). If two columns, will subset and re-name. We used this to subset to only one replicate for samples that were sequenced in triplicate.
-6. `leafcutterPrepHelperScript`: Path to the Leafcutter `prepare_phenotype_table.py` helper script, which is used for normalization (and some filtering)
-7. `outDir`: Path to directory to write output files to
-<br><br>
+Technical details on the pipeline are documented in [`02_intron_usage/README.md`](./02_intron_usage/README.md).

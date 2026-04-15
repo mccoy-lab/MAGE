@@ -1,8 +1,9 @@
 # MAGE Expression Quantification
 
-This directory contains code to replicate the expression quantification procedure done as part of the initial MAGE publication. This procedure is broadly split into two sections:
+This directory contains code to replicate the expression quantification procedure done as part of the MAGE v1.1 release. This procedure is broadly split into three sections:
 1. Initial transcript-level quantification with [Salmon](https://combine-lab.github.io/salmon/)
 2. Filtering and normalization for eQTL mapping analysis
+3. Differential expression analysis and generating expression matrices
 
 *Note: these steps should be run in order*<br><br>
 
@@ -31,3 +32,16 @@ The script takes four arguments:
 3. `outQuantsDir`: Directory to write gene-level filtered expression quantification files to
 4. `outPrefix`: Prefix of output files in `outQuantsDir`
 <br><br>
+
+## Differential expression analysis and generating expression matrices
+
+The `03_deseq.ipynb` Jupyter notebook details the steps for generating expression matrices and performing differential expression analyses with the following contrasts:
+1. Focal continental group vs. all other groups (e.g. AFR vs. non-AFR)
+2. Focal population vs. all other populations (within the same continental group, e.g. YRI vs. non-YRI-in-AFR)
+
+The environment used to perform this analysis are detailed in the [`03_deseq.yaml`](resources/03_deseq.yaml) anaconda environment recipe, and the input parameters are available in the [`03_deseq_config.yaml`](resources/03_deseq_config.yaml) config file. The inputs for this notebook are the following:
+1. Directory of salmon quantifications generated from [`01_run_salmon.sh`](01_run_salmon.sh)
+2. BED file containing genes retained after filtering for low-expression or low-complexity (generated from [`02_filter_normalize.sh`](02_filter_normalize.sh))
+3. Gencode annotation GFF3 file (available from [here](https://www.gencodegenes.org/human/release_38.html))
+4. Metadata file containing sample information
+
