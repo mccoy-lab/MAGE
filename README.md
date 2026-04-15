@@ -21,7 +21,7 @@
   - SRR37907958 derives from NA11919
 - These runs replace the incorrect labeled SRR19762530 and SRR19762653 runs
   - A small note: SRR19762530 and SRR19762653 were re-labeled on SRA before being replaced. So SRR19762530 will appear as being derived from NA11919 if you look it up on SRA now.
-- **The zenodo has NOT been updated yet. Please continue to use these data with caution.**
+- **The Zenodo repository has NOT been updated yet. Please continue to use these data with caution.**
 
 Thank you Dr. Steven M. Heaton for making us aware of this issue.
 
