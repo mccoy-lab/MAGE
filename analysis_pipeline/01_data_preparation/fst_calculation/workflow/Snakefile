@@ -6,7 +6,8 @@ DESCRIPTION:
     the global background (e.g., AFS vs. [EUR + SAS + EAS + AMR]) using
     only fine-mapped variants from MAGE v.1.1.
 USAGE: 
-    snakemake --configfile workflow/config.yaml --profile path/to/profile/ -p 
+    snakemake --configfile config.yaml -j 16 --use-conda -p # Adjust -j for parallel execution
+    snakemake --configfile config.yaml --profile /path/to/profile/ -p # Use --profile to specify the Snakemake profile for cluster execution
 """
 
 #--- IMPORTS ---#

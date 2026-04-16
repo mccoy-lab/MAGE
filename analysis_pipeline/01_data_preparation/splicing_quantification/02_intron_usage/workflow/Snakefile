@@ -2,10 +2,13 @@
 
 """
 DESCRIPTION:
-    Pipeline will run generate leafcutter output, beginning with a directory of STAR-aligned bam files.
+    Snakemake workflow used to quantify intron excision with `regtools` and `leafcutter` from STAR-aligned RNA-seq BAM files. 
+    The workflow aggregates junction usage across all libraries, clusters introns with `leafcutter`, maps clusters to genes using GENCODE v38 exons, 
+    and produces filtered and normalized intron usage phenotypes for downstream sQTL analyses.
 
 USAGE: 
-    snakemake --configfile workflow/config.yaml --profile path/to/profile/ -p 
+    snakemake --configfile config.yaml -j 16 --use-conda -p # Adjust -j for parallel execution
+    snakemake --configfile config.yaml --profile /path/to/profile -p # Use --profile to specify the Snakemake profile for cluster execution
 """
 
 #--- IMPORTS ---#
