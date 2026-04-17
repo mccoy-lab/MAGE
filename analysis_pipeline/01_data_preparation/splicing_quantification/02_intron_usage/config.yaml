@@ -1,0 +1,4 @@
+focal_metadata: '/path/to/sample.metadata.MAGE.v1.1.txt' # Metadata file with one row per KGP sample (only one {library_id} per biological replicate)
+total_metadata: '/path/to/sequencing_library.metadata.MAGE.v1.1.txt' # Metadata file with one row per {library_id} (multiple {library_id} per biological replicate)
+bam_dir: '/path/to/star_alignments_dir/' # Directory containing STAR-aligned BAM files, named as {library_id}.bam
+gencode_url: 'https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/gencode.v38.annotation.gtf.gz' # URL for GENCODE v38 annotation GTF file

@@ -1,0 +1,6 @@
+workflow/bin/leafcutter/
+logs/
+.snakemake/
+results/
+data/
+config.mage1_1.yaml

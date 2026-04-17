@@ -1,0 +1,16 @@
+name: leafcutter_analysis
+channels:
+  - bioconda
+  - conda-forge
+  - r
+dependencies:
+  - python=3.8.18
+  - pybigwig
+  - htslib
+  - pip
+  - pip:
+      - pandas==2.0.3
+      - numpy
+      - scikit-learn
+      - qtl==0.1.8
+      - scipy

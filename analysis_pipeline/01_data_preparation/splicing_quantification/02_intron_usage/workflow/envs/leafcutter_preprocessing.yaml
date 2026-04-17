@@ -1,0 +1,8 @@
+name: leafcutter_preprocessing
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - python=2.7
+  - samtools
+  - regtools

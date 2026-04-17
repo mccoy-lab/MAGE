@@ -1,0 +1,17 @@
+name: smk7_fst
+channels:
+  - conda-forge
+  - bioconda
+  - r
+dependencies:
+  - mamba<2.00
+  - snakemake<=7.32.0
+  - bcftools
+  - vcflib
+  - pip
+  - r-tidyverse
+  - pip:
+    - tqdm
+    - numpy
+    - scipy
+    - pandas

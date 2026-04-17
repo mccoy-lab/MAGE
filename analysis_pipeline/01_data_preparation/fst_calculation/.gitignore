@@ -1,0 +1,4 @@
+.snakemake/
+results/
+logs/
+config.mage1_1.yaml

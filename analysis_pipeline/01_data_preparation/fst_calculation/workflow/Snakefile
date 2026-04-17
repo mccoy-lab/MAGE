@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+
+"""
+DESCRIPTION:
+    Pipeline will compute Fst values for each focal population vs. 
+    the global background (e.g., AFS vs. [EUR + SAS + EAS + AMR]) using
+    only fine-mapped variants from MAGE v.1.1.
+USAGE: 
+    snakemake --configfile config.yaml -j 16 --use-conda -p # Adjust -j for parallel execution
+    snakemake --configfile config.yaml --profile /path/to/profile/ -p # Use --profile to specify the Snakemake profile for cluster execution
+"""
+
+#--- IMPORTS ---#
+import pathlib
+import pandas as pd
+
+#--- CONFIGURATION ---#
+# configure shell behavior for all rules
+shell.executable("/bin/bash")
+shell.prefix("set -euo pipefail;")
+
+# Create a log directory
+pathlib.Path("logs/").mkdir(parents=True, exist_ok=True)
+
+#--- FUNCTION VARIABLE DECLARATION ---#
+
+
+#--- DYNAMIC VARIABLE DECLARATION ---#
+'''
+Read the tsv stored in config['focal_metadata'] into 
+pandas dataframes and extract the `internal_libraryID` 
+column as a list that can be used for iterating over samples.
+'''
+focal_metadata_df = pd.read_csv(config["focal_metadata"], sep="\t")
+# focal_libraries = focal_metadata_df["internal_libraryID"].tolist()
+
+'''
+Create a dictionary mapping each continental group to the list of 
+internal_libraryIDs that belong to that group. 
+'''
+# continental_groups = focal_metadata_df.groupby("continentalGroup")["internal_libraryID"].apply(list).to_dict()
+continental_groups = ["AFR", "EUR", "SAS", "EAS", "AMR"]
+
+'''
+Specify chromosomes to iterate over for Fst calculation. 
+'''
+chroms = [f"chr{i}".replace(" ", "") for i in range(1, 23)] + ["chrX"]
+
+#--- RULES ---#
+localrules:
+    all
+
+rule all:
+    input:
+        expand("results/wcFst.{group}.tsv",
+               group=continental_groups)
+
+rule wcfst_autosomes:
+# Each run of this rule will compute Fst for one chromosome, stratifying output to 
+# each focal population vs. the global background.
+    input: 
+        metadata = config["focal_metadata"],
+        finemapped_variants = config["finemapped_variants"],
+        vcf = config["tgp_vcf_dir"] + "1kGP_high_coverage_Illumina.{chrom}.filtered.SNV_INDEL_SV_phased_panel.vcf.gz",
+        fst_script = "workflow/bin/compute_fst.sh"
+    output:
+        vcf = "results/finemapped_loci.{chrom}.vcf.gz",
+        fst = temp(expand("results/wcFst.{group}.{{chrom}}.tsv",
+                     group=continental_groups))
+    wildcard_constraints:
+        chrom = r"chr[1-9]|chr1[0-9]|chr2[0-2]"
+    shell:
+        """
+        bash {input.fst_script} \
+            {input.metadata} \
+            {input.vcf} \
+            {input.finemapped_variants} \
+            {wildcards.chrom} \
+            results/
+        """
+
+rule wcfst_chrX:
+# Because the chrX VCF has a different naming convention, we need a separate rule for it.
+    input: 
+        metadata = config["focal_metadata"],
+        finemapped_variants = config["finemapped_variants"],
+        vcf = config["tgp_vcf_dir"] + "1kGP_high_coverage_Illumina.chrX.filtered.SNV_INDEL_SV_phased_panel.v2.fixploidy.snv_indel_only.vcf.gz",
+        fst_script = "workflow/bin/compute_fst.sh"
+    output:
+        vcf = "results/finemapped_loci.chrX.vcf.gz",
+        fst = temp(expand("results/wcFst.{group}.chrX.tsv",
+                     group=continental_groups))
+    shell:
+        """
+        bash {input.fst_script} \
+            {input.metadata} \
+            {input.vcf} \
+            {input.finemapped_variants} \
+            chrX \
+            results/
+        """
+
+rule combine_fst_results:
+# combine the Fst results for each chromosome into a single file per population.
+    input:
+        expand("results/wcFst.{{group}}.{chrom}.tsv",
+               chrom=chroms)
+    output:
+        results = "results/wcFst.{group}.tsv"
+    shell:
+        """
+        printf "seqid\tpos\ttargetaf\tbackgroundaf\twcFst\n" > {output.results}
+        cat {input} >> {output.results}
+        """

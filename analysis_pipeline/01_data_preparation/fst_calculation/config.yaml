@@ -1,0 +1,3 @@
+focal_metadata: '/path/to/sample.metadata.MAGE.v1.1.txt' # Metadata file with one row per KGP sample (only one {library_id} per biological replicate)
+finemapped_variants: '/path/to/eQTL_finemapping.leadVariant_aFCn.MAGE.v1.1.txt.gz' # Fine-mapped lead variants with loci IDs (e.g., 1:19254:G:C)
+tgp_vcf_dir: '/path/to/GRCh38_phased_vcfs/' # Directory containing 1KGP phased VCFs by chromosome; variants IDs should also be annotated (e.g., 1:19254:G:C)
