@@ -56,6 +56,7 @@ The `all` rule expects the following files:
 2. `results/leafcutter_analysis/mage_v1.1_perind.counts.normed.genes.filtered.bed.gz`: Normalized intron usage
 3. `results/leafcutter_analysis/mage_v1.1_perind.counts.normed.genes.filtered.phenotype_groups.txt`: Mapping of phenotype IDs to genes
 
+The `results/leafcutter/` directory also contains intermediate files such as per-sample junction counts and raw cluster usage files from running `leafcutter`'s `leafcutter_cluster_regtools.py` script. See the [`leafcutter` documentation for details](analysis_pipeline/01_data_preparation/splicing_quantification/02_intron_usage/README.md).
 
 #### Running the workflow
 
