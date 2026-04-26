@@ -52,7 +52,9 @@ Briefly, this repo contains the following data:
 
 READMEs are provided for all data in the repo.
 
-If you are having trouble accessing these data, please feel free to contact us to explore other options (e.g., Globus). 
+If you are having trouble accessing these data, please feel free to contact us to explore other options (e.g., Globus).
+
+**Note** : all analyses were performed using the GRCh38 reference and results are in the same build.
 
 ### Variant calls
 
