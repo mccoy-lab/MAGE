@@ -4,7 +4,7 @@
 # Get args #
 #==========#
 
-transcriptGTF=$1 # GTF file with transcript annotations (e.g. gencode.v38.annotation.gtf.gz)
+transcriptGTF=$1 # GTF file with transcript annotations (e.g. gencode.v38.annotation.gtf)
 salmonQuantListFile=$2 # Two-column tab-separated file with sampleID and path to salmon quant.sf file
 outQuantsDir=$3 # Directory to write gene-level quantifications to
 outPrefix=$4 # Prefix of output files
@@ -83,7 +83,10 @@ for suffix in "DESeq2-normalized-logged-pseudocounts" "inverse-normal-tmm" "pseu
 	expressionTable=$outQuantsDir/$outPrefix.filtered.$suffix.tab
 	outBed=$outQuantsDir/$outPrefix.filtered.$suffix.bed
 
-	$tableToBedScript --inputTable $expressionTable --gtf $transcriptGTF --out $outBed
+	$tableToBedScript --inputTable $expressionTable --gtf $transcriptGTF --out ${outBed}.tmp
+
+	( head -n 1 ${outBed}.tmp && tail -n +2 ${outBed}.tmp | sort -k1,1V -k2,2g -k3,3g ) > $outBed
+	rm ${outBed}.tmp
 
 	bgzip $outBed
 	tabix -p bed $outBed.gz

@@ -255,7 +255,7 @@ args <- parse_args(p)
 
 cat('\n\tReading in data... ')
 
-tx_usage_df <- read.table(file=args$splicing_frac, sep='\t', header=TRUE, nrows=10001)
+tx_usage_df <- read.table(file=args$splicing_frac, sep='\t', header=TRUE)
 
 clusters <- unique(tx_usage_df$cluster)
 

@@ -24,6 +24,12 @@ def main():
 	bed_df = pd.merge(bed_template_df, expression_df, left_index=True, right_index=True)
 	bed_df = bed_df.groupby('chr', sort=False, group_keys=False).apply(lambda x: x.sort_values('start'))
 	bed_df.rename(columns={'chr': '#Chr', 'gene_id': 'ID'}, inplace=True)
+
+	# Sort samples
+	sorted_samples = sorted(bed_df.columns.to_list()[4:])
+	sorted_cols = ["#Chr", "start", "end", "ID"] + sorted_samples
+	bed_df = bed_df.loc[:, sorted_cols]
+
 	bed_df.to_csv(args.out, header=True, index=False, sep='\t')
 
 

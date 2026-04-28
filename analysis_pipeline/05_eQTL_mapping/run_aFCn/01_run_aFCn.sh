@@ -60,7 +60,7 @@ tabix -p bed $tmp_correctedExpression.gz
 # Format expression input #
 #=========================#
 
-tmpExpressionFile=$tmpPrefix.expression.txt
+tmpExpressionFile=$tmpPrefix.expression.txt.gz
 
 zcat $tmp_correctedExpression | cut -f 4- | awk -v FS="\t" -v OFS="," 'NR==1 {$1="Name"} {$1=$1; print}' | gzip -c > $tmpExpressionFile
 
